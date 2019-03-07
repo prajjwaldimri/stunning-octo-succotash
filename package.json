@@ -1,0 +1,19 @@
+{
+  "name": "stunning-octo-succotash",
+  "version": "0.1.0",
+  "description": "Social Network for ITG",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prajjwaldimri/stunning-octo-succotash.git"
+  },
+  "author": "",
+  "license": "GPL-2.0-or-later",
+  "bugs": {
+    "url": "https://github.com/prajjwaldimri/stunning-octo-succotash/issues"
+  },
+  "homepage": "https://github.com/prajjwaldimri/stunning-octo-succotash#readme"
+}
