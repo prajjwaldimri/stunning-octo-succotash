@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/prajjwaldimri/stunning-octo-succotash/issues"
   },
-  "homepage": "https://github.com/prajjwaldimri/stunning-octo-succotash#readme"
+  "homepage": "https://github.com/prajjwaldimri/stunning-octo-succotash#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1"
+  }
 }
