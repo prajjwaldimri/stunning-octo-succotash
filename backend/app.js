@@ -1,5 +1,6 @@
-const express = require("express");
-const { ApolloServer, gql } = require("apollo-server-express");
+const express = require('express');
+const cors = require('cors');
+const { ApolloServer, gql } = require('apollo-server-express');
 
 const typeDefs = gql`
   type Query {
@@ -9,15 +10,16 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    hello: () => "Hello World"
-  }
+    hello: () => 'Hello World',
+  },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
 const app = express();
 server.applyMiddleware({ app });
+app.use(cors());
 
-app.listen(3000, function() {
+app.listen(3000, () => {
   console.log(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`);
 });
