@@ -1,21 +1,12 @@
+import schema from './graphql/schema/schema.graphql';
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const consola = require('consola');
-const { ApolloServer, gql } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-    user: User
-  }
-
-  type User {
-    name: String
-    email: String
-    username: String
-  }
-`;
+const typeDefs = [schema];
 
 const resolvers = {
   Query: {

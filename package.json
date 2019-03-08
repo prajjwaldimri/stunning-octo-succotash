@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "concurrently \"npm:dev-client\" \"npm:dev-server\" ",
     "dev-client": "cd client && npm run dev",
-    "dev-server": "nodemon --exec babel-node server/app.js",
-    "start": "cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js"
+    "dev-server": "rm -rf ./node_modules/.cache/babel-loader && nodemon --exec babel-node server/src/app.js",
+    "start": "rm -rf ./node_modules/.cache/babel-loader && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -27,13 +27,15 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "graphql": "^14.1.1"
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.4",
+    "babel-plugin-import-graphql": "^2.7.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",

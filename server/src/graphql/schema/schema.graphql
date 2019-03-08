@@ -1,0 +1,6 @@
+#import "./types/user.graphql"
+
+type Query {
+  hello: String
+  user: User
+}
