@@ -4,8 +4,10 @@
   "description": "Social Network for ITG",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server/app.js",
-    "start": "node server/app.js"
+    "dev": "concurrently \"npm:dev-client\" \"npm:dev-server\" ",
+    "dev-client": "cd client && npm run dev",
+    "dev-server": "nodemon server/app.js",
+    "start": "cd client && npm run build && cd .. && node server/app.js"
   },
   "repository": {
     "type": "git",
@@ -20,8 +22,10 @@
   "dependencies": {
     "apollo-server-express": "^2.4.8",
     "body-parser": "^1.18.3",
+    "concurrently": "^4.1.0",
     "consola": "^2.5.6",
     "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "graphql": "^14.1.1"
   },
