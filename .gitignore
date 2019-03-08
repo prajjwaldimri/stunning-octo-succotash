@@ -1,3 +1,6 @@
+# Generated public folder
+/server/public/
+
 # Logs
 logs
 *.log

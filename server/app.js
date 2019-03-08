@@ -21,6 +21,13 @@ const app = express();
 app.use(cors());
 server.applyMiddleware({ app });
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(`${__dirname}/public`));
+  app.get(/.*/, (req, res) => {
+    res.sendFile(`${__dirname}/public/index.html`);
+  });
+}
+
 app.listen(process.env.PORT || 3000, () => {
   consola.success(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`);
 });
