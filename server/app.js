@@ -19,8 +19,8 @@ const resolvers = {
 const server = new ApolloServer({ typeDefs, resolvers });
 
 const app = express();
-app.use(cors());
 server.applyMiddleware({ app });
+app.use(cors());
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(`${__dirname}/public`));
