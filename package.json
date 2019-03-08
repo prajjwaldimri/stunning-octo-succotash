@@ -2,7 +2,7 @@
   "name": "stunning-octo-succotash",
   "version": "0.1.0",
   "description": "Social Network for ITG",
-  "main": "index.js",
+  "main": "server/app.js",
   "scripts": {
     "dev": "concurrently \"npm:dev-client\" \"npm:dev-server\" ",
     "dev-client": "cd client && npm run dev",

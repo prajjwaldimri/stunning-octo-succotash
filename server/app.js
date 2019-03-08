@@ -7,12 +7,20 @@ const { ApolloServer, gql } = require('apollo-server-express');
 const typeDefs = gql`
   type Query {
     hello: String
+    user: User
+  }
+
+  type User {
+    name: String
+    email: String
+    username: String
   }
 `;
 
 const resolvers = {
   Query: {
     hello: () => 'Hello World',
+    user: () => ({ name: 'Test', email: 'test@test.com', username: 'testUsername' }),
   },
 };
 
