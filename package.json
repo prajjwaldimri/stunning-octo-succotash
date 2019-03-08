@@ -4,7 +4,8 @@
   "description": "Social Network for ITG",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon backend/app.js",
+    "start": "node backend/app.js"
   },
   "repository": {
     "type": "git",
@@ -17,9 +18,16 @@
   },
   "homepage": "https://github.com/prajjwaldimri/stunning-octo-succotash#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "apollo-server-express": "^2.4.8",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "graphql": "^14.1.1"
   },
   "devDependencies": {
-    "eslint": "^5.15.1"
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-vue": "^5.2.2",
+    "nodemon": "^1.18.10"
   }
 }
