@@ -1,5 +1,6 @@
-# Generated public folder
+# Generated folders
 /server/public/
+/server/dist/
 
 # Logs
 logs
