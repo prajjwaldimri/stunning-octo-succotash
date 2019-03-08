@@ -21,6 +21,6 @@ const app = express();
 app.use(cors());
 server.applyMiddleware({ app });
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   consola.success(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`);
 });
