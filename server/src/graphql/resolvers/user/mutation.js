@@ -10,6 +10,9 @@ const createAccount = (parent, args) => {
   if (validator.isEmpty(args.user.username)) {
     throw new Error('Username cannot be empty');
   }
+  if (validator.isEmpty(args.user.password)) {
+    throw new Error('password cannot be empty');
+  }
 };
 
 
