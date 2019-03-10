@@ -2,7 +2,7 @@ type User {
   name: String
   email: String
   username: String
-  age: Number
+  age: Int
 }
 
 input CreateAccountInput {

@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm:dev-client\" \"npm:dev-server\" ",
     "dev-client": "cd client && npm run dev",
     "dev-server": "rm -rf ./node_modules/.cache/babel-loader && nodemon --exec babel-node server/src/app.js",
-    "start": "rm -rf ./node_modules/.cache/babel-loader && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js"
+    "start": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js"
   },
   "repository": {
     "type": "git",

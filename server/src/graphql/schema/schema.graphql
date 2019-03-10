@@ -3,6 +3,7 @@
 
 type Query {
   ping: String
+  test: String
 }
 
 type Mutation {
