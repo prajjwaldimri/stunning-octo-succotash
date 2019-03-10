@@ -32,4 +32,16 @@ describe('User Test', async function () {
     const response = await client.mutate({ mutation: createAccount });
     expect(response.data.username).to.equal(username);
   });
+
+  it('Should not create a user(invalid username)', async () => {
+    const username = '>>?./$@_,,';
+    const createAccount = gql`
+      mutation {
+        createAccount(user: { username: "${username}", password: "20081997" }){
+          username
+        }
+      }
+    `;
+    const response = await client.mutate({ mutation: createAccount });
+  });
 });
