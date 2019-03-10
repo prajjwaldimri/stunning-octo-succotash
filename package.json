@@ -7,7 +7,8 @@
     "dev": "concurrently \"npm:dev-client\" \"npm:dev-server\" ",
     "dev-client": "cd client && npm run dev",
     "dev-server": "rm -rf ./node_modules/.cache/babel-loader && nodemon --exec babel-node server/src/app.js",
-    "start": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js"
+    "start": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js",
+    "test": "NODE_ENV=test mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit"
   },
   "repository": {
     "type": "git",
@@ -34,9 +35,13 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "apollo-boost": "^0.3.1",
     "babel-plugin-import-graphql": "^2.7.0",
     "chai": "^4.2.0",
+    "cross-fetch": "^3.0.1",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
