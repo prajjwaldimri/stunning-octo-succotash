@@ -2,4 +2,10 @@ type User {
   name: String
   email: String
   username: String
+  age: Number
+}
+
+input CreateAccountInput {
+  username: String
+  password: String
 }
