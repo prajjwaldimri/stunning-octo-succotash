@@ -45,4 +45,17 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+
+  it('Should username be empty(empty username)', async () => {
+    const username = ' ';
+    const createAccount = gql`
+      mutation {
+        createAccount(user: { username: "${username}", password: "20081997" }){
+          username
+        }
+      }
+    `;
+    const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 });
