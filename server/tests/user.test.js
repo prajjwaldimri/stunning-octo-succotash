@@ -42,6 +42,7 @@ describe('User Test', async function () {
         }
       }
     `;
-    const response = await client.mutate({ mutation: createAccount });
+    const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 });
