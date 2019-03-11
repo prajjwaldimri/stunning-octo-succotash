@@ -58,4 +58,12 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+
+  it('Should not login (Empty Username)', async () => {
+    throw new Error('Test Not Implemented');
+  });
+
+  it('Should not login (Empty Password)', async () => {
+    throw new Error('Test Not Implemented');
+  });
 });
