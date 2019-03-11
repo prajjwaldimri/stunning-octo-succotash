@@ -30,7 +30,7 @@ describe('User Test', async function () {
       }
     `;
     const response = await client.mutate({ mutation: createAccount });
-    expect(response.data.username).to.equal(username);
+    expect(response.data.createAccount.username).to.equal(username);
   });
 
   it('Should not create a user(invalid username)', async () => {

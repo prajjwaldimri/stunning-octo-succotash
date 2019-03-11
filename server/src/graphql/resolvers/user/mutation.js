@@ -1,5 +1,3 @@
-
-
 import validator from 'validator';
 import { UserInputError } from 'apollo-server-express';
 
@@ -13,7 +11,8 @@ const createAccount = (parent, args) => {
   if (validator.isEmpty(args.user.password)) {
     throw new Error('password cannot be empty');
   }
+  // Currently returning dummy data here.
+  return { username: args.user.username };
 };
-
 
 module.exports = { createAccount };
