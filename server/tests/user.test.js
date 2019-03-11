@@ -33,7 +33,7 @@ describe('User Test', async function () {
     expect(response.data.createAccount.username).to.equal(username);
   });
 
-  it('Should not create a user(invalid username)', async () => {
+  it('Should not create a user(Invalid username)', async () => {
     const username = '>>?./$@_,,';
     const createAccount = gql`
       mutation {
@@ -46,7 +46,7 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
-  it('Should username be empty(empty username)', async () => {
+  it('Should not create a user(Empty username)', async () => {
     const username = ' ';
     const createAccount = gql`
       mutation {
@@ -57,6 +57,10 @@ describe('User Test', async function () {
     `;
     const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should not create a user(empty password)', async () => {
+    throw new Error('Test not Implemented');
   });
 
   it('Should not login (Empty Username)', async () => {
