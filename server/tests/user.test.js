@@ -47,7 +47,7 @@ describe('User Test', async function () {
   });
 
   it('Should not create a user(Empty username)', async () => {
-    const username = ' ';
+    const username = '    ';
     const createAccount = gql`
       mutation {
         createAccount(user: { username: "${username}", password: "20081997" }){
@@ -60,14 +60,41 @@ describe('User Test', async function () {
   });
 
   it('Should not create a user(empty password)', async () => {
-    throw new Error('Test not Implemented');
+    const password = '   ';
+    const createAccount = gql`
+      mutation {
+        createAccount(user: { username: "kaiskas", password:"${password}" }){
+          password
+        }
+      }
+    `;
+    const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
   it('Should not login (Empty Username)', async () => {
-    throw new Error('Test Not Implemented');
+    const username = '   ';
+    const loginAccount = gql`
+      mutation {
+        loginAccount(user: { username: "${username}", password: "20081997" }){
+          username
+        }
+      }
+    `;
+    const error = await client.mutate({ mutation: loginAccount }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
   it('Should not login (Empty Password)', async () => {
-    throw new Error('Test Not Implemented');
+    const password = '   ';
+    const loginAccount = gql`
+      mutation {
+        login(user: { username: "kaiskas", password:"${password}" }){
+          password
+        }
+      }
+    `;
+    const error = await client.mutate({ mutation: loginAccount }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 });
