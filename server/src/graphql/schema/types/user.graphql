@@ -5,7 +5,7 @@ type User {
   age: Int
 }
 
-input CreateAccountInput {
+input UserAccountInput {
   username: String
   password: String
 }

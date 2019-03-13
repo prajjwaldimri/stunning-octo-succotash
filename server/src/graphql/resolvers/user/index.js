@@ -1,3 +1,4 @@
-import { createAccount } from './mutation';
+import { createAccount, login } from './mutation';
 
-module.exports = { createAccount };
+
+module.exports = { createAccount, login };

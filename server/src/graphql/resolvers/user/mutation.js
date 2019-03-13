@@ -6,15 +6,15 @@ const createAccount = (parent, args) => {
     throw new UserInputError('username can only be alphanumeric');
   }
   if (validator.isEmpty(args.user.username)) {
-    throw new UserInputError('Username cannot be empty');
+    throw new Error('Username cannot be empty');
   }
   if (validator.isEmpty(args.user.password)) {
-    throw new UserInputError('password cannot be empty');
+    throw new Error('password cannot be empty');
   }
   // Currently returning dummy data here.
   return { username: args.user.username };
 };
-const loginAccount = (parent, args) => {
+const login = (parent, args) => {
   if (validator.isEmpty(args.user.username)) {
     throw new Error('Username cannot be empty');
   }
@@ -24,4 +24,4 @@ const loginAccount = (parent, args) => {
 
   return { username: args.user.username };
 };
-module.exports = { createAccount, loginAccount };
+module.exports = { createAccount, login };

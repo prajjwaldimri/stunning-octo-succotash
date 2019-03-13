@@ -6,6 +6,7 @@ const resolvers = {
   },
   Mutation: {
     createAccount: user.createAccount,
+    login: user.login,
   },
 };
 

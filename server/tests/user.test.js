@@ -74,27 +74,27 @@ describe('User Test', async function () {
 
   it('Should not login (Empty Username)', async () => {
     const username = '   ';
-    const loginAccount = gql`
+    const login = gql`
       mutation {
-        loginAccount(user: { username: "${username}", password: "20081997" }){
+        login(user: { username: "${username}", password: "20081997" }){
           username
         }
       }
     `;
-    const error = await client.mutate({ mutation: loginAccount }).then(assert.fail, err => err);
+    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
   it('Should not login (Empty Password)', async () => {
     const password = '   ';
-    const loginAccount = gql`
+    const login = gql`
       mutation {
         login(user: { username: "kaiskas", password:"${password}" }){
           username
         }
       }
     `;
-    const error = await client.mutate({ mutation: loginAccount }).then(assert.fail, err => err);
+    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 });
