@@ -97,16 +97,16 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
-  it('Shoud not log in ( Invalid username and Password)', async () => {
+
+  it('Should not log in ( Invalid username and Password)', async () => {
     const login = gql`
-      
       mutation {
-        login(user: { username: "kaiskas", password:"20081997"  }){
+        login(user: { username: "kaiskas", password: "20081997" }) {
           username
         }
       }
     `;
-    const error = await client.mutate({ mutation: login}).then(assert.fail, err => err);
+    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 });
