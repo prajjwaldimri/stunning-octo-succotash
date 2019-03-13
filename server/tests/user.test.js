@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-/* global it describe */
+/* global it describe before */
 
 require('@babel/polyfill/noConflict');
 require('@babel/polyfill');
@@ -63,7 +63,7 @@ describe('User Test', async function () {
     const password = '   ';
     const createAccount = gql`
       mutation {
-        createAccount(user: { username: "kaiskas", password: "${password}" }){
+        createAccount(user: { username: "kaiskas", password:"${password}" }){
           username
         }
       }
@@ -84,6 +84,7 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+ 
 
   it('Should not login (Empty Password)', async () => {
     const password = '   ';
@@ -97,4 +98,17 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+});
+it('Should login', async () => {
+  const username = 'testUsername';
+  const login = gql`
+      mutation {
+        login(user: { username: "${username}", password: "20081997" }){
+          username
+        }
+      }
+    `;
+  }
+  const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
+  expect(error.graphQLErrors).to.have.lengthOf.above(0);
 });
