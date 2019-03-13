@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "concurrently \"npm:dev-client\" \"npm:dev-server\" ",
     "dev-client": "cd client && npm run dev",
-    "dev-server": "rm -rf ./node_modules/.cache/babel-loader && nodemon --exec babel-node server/src/app.js",
+    "dev-server": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nodemon --exec babel-node server/src/app.js",
     "start": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js",
-    "test": "NODE_ENV=test mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit"
+    "test": "NODE_ENV=test && rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit"
   },
   "repository": {
     "type": "git",
