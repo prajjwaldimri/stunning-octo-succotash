@@ -20,20 +20,6 @@ const client = new ApolloClient({
 describe('User Test', async function () {
   this.timeout(10000);
 
-  it('Should login', async () => {
-    const login = gql`
-        mutation {
-          login(user: { username: "kaiskas", password: "password1234" }){
-            username
-          }
-        }
-      `;
-
-    const response = await client.mutate({ mutation: login }).then(assert.fail, err => err);
-    expect(response.graphQLErrors).to.have.lengthOf.above(0);
-  });
-
-
   it('Should create a user', async () => {
     const username = 'testUsername';
     const createAccount = gql`
@@ -123,5 +109,18 @@ describe('User Test', async function () {
     `;
     const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+  it('Should login', async () => {
+    const username = 'kaiskas';
+    const login = gql`
+        mutation {
+          login(user: { username: "${username}", password: "password1234" }){
+            username
+          }
+        }
+      `;
+
+    const response = await client.mutate({ mutation: login });
+    expect(response.data.login.username).to.equal(username);
   });
 });
