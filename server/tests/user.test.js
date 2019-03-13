@@ -97,4 +97,12 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+  it('Shoud not log in ( Invalid username and Password)', async () => {
+    const createAccount = gql`
+      
+      }
+    `;
+    const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 });
