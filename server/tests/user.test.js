@@ -64,7 +64,7 @@ describe('User Test', async function () {
     const createAccount = gql`
       mutation {
         createAccount(user: { username: "kaiskas", password:"${password}" }){
-          password
+          username
         }
       }
     `;
@@ -90,7 +90,7 @@ describe('User Test', async function () {
     const loginAccount = gql`
       mutation {
         login(user: { username: "kaiskas", password:"${password}" }){
-          password
+          username
         }
       }
     `;
