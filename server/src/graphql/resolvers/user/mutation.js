@@ -21,7 +21,7 @@ const login = (parent, args) => {
   if (validator.isEmpty(args.user.password, { ignore_whitespace: true })) {
     throw new UserInputError('password cannot be empty');
   }
-  if (args.user.username === 'kaiskas' && args.user.username === 'password1234') {
+  if (args.user.username === 'kaiskas' && args.user.password === 'password1234') {
     return { username: args.user.username };
   }
   throw new UserInputError('Username or password did not match');

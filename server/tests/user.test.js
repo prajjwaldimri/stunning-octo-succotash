@@ -85,7 +85,6 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
-
   it('Should not login (Empty Password)', async () => {
     const password = '   ';
     const login = gql`
@@ -110,6 +109,7 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+
   it('Should login', async () => {
     const username = 'kaiskas';
     const login = gql`
