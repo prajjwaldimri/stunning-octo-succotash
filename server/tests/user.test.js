@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-/* global it describe before */
+/* global it describe */
 
 require('@babel/polyfill/noConflict');
 require('@babel/polyfill');
@@ -63,7 +63,7 @@ describe('User Test', async function () {
     const password = '   ';
     const createAccount = gql`
       mutation {
-        createAccount(user: { username: "kaiskas", password:"${password}" }){
+        createAccount(user: { username: "kaiskas", password: "${password}" }){
           username
         }
       }
