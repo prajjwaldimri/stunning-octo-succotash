@@ -84,7 +84,7 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
- 
+
 
   it('Should not login (Empty Password)', async () => {
     const password = '   ';
@@ -120,7 +120,7 @@ it('Should login', async () => {
         }
       }
     `;
-  }
-  const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
-  expect(error.graphQLErrors).to.have.lengthOf.above(0);
+
+  const response = await client.mutate({ mutation: login }).then(assert.fail, err => err);
+  expect(response.graphQLErrors).to.have.lengthOf.above(0);
 });
