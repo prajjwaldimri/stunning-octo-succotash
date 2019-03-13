@@ -100,7 +100,7 @@ describe('User Test', async function () {
   });
 });
 it('Should login', async () => {
-  const username = 'testUsername';
+  const username = 'kaiskas';
   const login = gql`
       mutation {
         login(user: { username: "${username}", password: "20081997" }){
