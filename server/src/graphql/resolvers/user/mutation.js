@@ -18,14 +18,15 @@ const createAccount = async (parent, args) => {
   return User.create({ username: args.user.username, password: hashedPassword });
 };
 
-const login = (parent, args) => {
+const login = async (parent, args) => {
   if (validator.isEmpty(args.user.username, { ignore_whitespace: true })) {
     throw new UserInputError('Username cannot be empty');
   }
   if (validator.isEmpty(args.user.password, { ignore_whitespace: true })) {
     throw new UserInputError('password cannot be empty');
   }
-  if (args.user.username === 'kaiskas' && args.user.password === 'password1234') {
+  const hashedPassword = await bcrypt.hash(args.user.password, 10);
+  if (User.find({ username: args.user.username, password: hashedPassword })) {
     return { username: args.user.username };
   }
   throw new UserInputError('Username or password did not match');
