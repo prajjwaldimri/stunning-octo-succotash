@@ -26,7 +26,8 @@ const login = async (parent, args) => {
     throw new UserInputError('password cannot be empty');
   }
   const hashedPassword = await bcrypt.hash(args.user.password, 10);
-  if (User.find({ username: args.user.username, password: hashedPassword })) {
+
+  if (await User.findOne({ username: args.user.username, password: hashedPassword })) {
     return { username: args.user.username };
   }
   throw new UserInputError('Username or password did not match');
