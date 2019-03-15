@@ -1,7 +1,8 @@
 import validator from 'validator';
 import { UserInputError } from 'apollo-server-express';
+import User from '../../../models/user';
 
-const createAccount = (parent, args) => {
+const createAccount = async (parent, args) => {
   if (!validator.isAlphanumeric(args.user.username)) {
     throw new UserInputError('username can only be alphanumeric');
   }
@@ -12,7 +13,7 @@ const createAccount = (parent, args) => {
     throw new UserInputError('Password cannot be empty');
   }
   // Currently returning dummy data here.
-  return { username: args.user.username };
+  return User.create({ username: args.user.username, password: args.user.password });
 };
 
 const login = (parent, args) => {
