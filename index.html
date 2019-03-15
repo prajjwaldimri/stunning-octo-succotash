@@ -222,6 +222,17 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
+            <a href="#user" class="toc-h1 toc-link" data-title="User">User</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#create-an-account" class="toc-h2 toc-link" data-title="Create An Account">Create An Account</a>
+                  </li>
+                  <li>
+                    <a href="#login" class="toc-h2 toc-link" data-title="Login">Login</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
           </li>
           <li>
@@ -243,7 +254,6 @@
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
             <li><a href='https://github.com/lord/slate'>Documentation Powered by Slate</a></li>
         </ul>
     </div>
@@ -251,12 +261,51 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Welcome to the SOS API. This API is built on <a href="https://graphql.org">GraphQL</a>.</p>
 
-<p>We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
-
-<p>This example API documentation page was created with <a href="https://github.com/lord/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&#39;s documentation.</p>
-<h1 id='authentication'>Authentication</h1>
+<p>All the requests should be sent to the <code>/graphql</code> endpoint.</p>
+<h1 id='user'>User</h1><h2 id='create-an-account'>Create An Account</h2>
+<p>Creates a new account for any user.</p>
+<pre class="highlight javascript tab-javascript"><code><span class="nx">query</span> <span class="p">{</span>
+  <span class="nx">createAccount</span><span class="p">(</span><span class="nx">user</span><span class="p">:</span> <span class="p">{</span><span class="nl">username</span><span class="p">:</span> <span class="s2">"test"</span><span class="p">,</span> <span class="nx">password</span><span class="p">:</span> <span class="s2">"testPassword"</span><span class="p">})</span>
+  <span class="p">{</span>
+    <span class="nx">username</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<blockquote>
+<p>The above mutation returns</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="s2">"data"</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"createAccount"</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='parameters'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>username</td>
+<td>true</td>
+<td>String!</td>
+<td>Should be unique</td>
+</tr>
+<tr>
+<td>password</td>
+<td>true</td>
+<td>String!</td>
+<td>Min. 8 characters required</td>
+</tr>
+</tbody></table>
+<h2 id='login'>Login</h2><h1 id='authentication'>Authentication</h1>
 <blockquote>
 <p>To authorize, use this code:</p>
 </blockquote>
