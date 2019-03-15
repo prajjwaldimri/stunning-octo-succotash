@@ -14,6 +14,7 @@ const createAccount = (parent, args) => {
   // Currently returning dummy data here.
   return { username: args.user.username };
 };
+
 const login = (parent, args) => {
   if (validator.isEmpty(args.user.username, { ignore_whitespace: true })) {
     throw new UserInputError('Username cannot be empty');
