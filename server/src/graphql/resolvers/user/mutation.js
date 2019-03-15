@@ -1,5 +1,6 @@
 import validator from 'validator';
 import { UserInputError } from 'apollo-server-express';
+import bcrypt from 'bcrypt';
 import User from '../../../models/user';
 
 const createAccount = async (parent, args) => {
@@ -12,8 +13,9 @@ const createAccount = async (parent, args) => {
   if (validator.isEmpty(args.user.password, { ignore_whitespace: true })) {
     throw new UserInputError('Password cannot be empty');
   }
-  // Currently returning dummy data here.
-  return User.create({ username: args.user.username, password: args.user.password });
+
+  const hashedPassword = await bcrypt.hash(args.user.password, 10);
+  return User.create({ username: args.user.username, password: hashedPassword });
 };
 
 const login = (parent, args) => {
