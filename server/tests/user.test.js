@@ -4,16 +4,15 @@
 require('@babel/polyfill/noConflict');
 require('@babel/polyfill');
 
-
 import 'cross-fetch/polyfill';
 
 import ApolloClient, { gql } from 'apollo-boost';
 import app from '../src/server';
 
-
 app.listen(1337, '127.0.0.1');
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import User from '../src/models/user';
 
 const { expect, assert } = require('chai');
 
@@ -23,6 +22,10 @@ const client = new ApolloClient({
 
 describe('User Test', async function () {
   this.timeout(10000);
+
+  before(async () => {
+    await User.deleteMany({});
+  });
 
   it('Should create a user', async () => {
     const username = 'testUsername';
