@@ -1,4 +1,7 @@
 language: node_js
+env:
+  - MONGODB_URI_TEST=$MONGODB_URI_TEST
+  - NODE_ENV=$NODE_ENV
 node_js:
   - "11"
 cache: npm
