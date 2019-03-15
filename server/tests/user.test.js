@@ -4,12 +4,16 @@
 require('@babel/polyfill/noConflict');
 require('@babel/polyfill');
 
+
 import 'cross-fetch/polyfill';
 
 import ApolloClient, { gql } from 'apollo-boost';
 import app from '../src/server';
 
+
 app.listen(1337, '127.0.0.1');
+
+const mongoose = require('mongoose');
 
 const { expect, assert } = require('chai');
 
