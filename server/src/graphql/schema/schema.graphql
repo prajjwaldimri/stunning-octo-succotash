@@ -3,9 +3,9 @@
 
 type Query {
   ping: String
+  login(user: UserAccountInput): User
 }
 
 type Mutation {
   createAccount(user: UserAccountInput): User
-  login(user: UserAccountInput): User
 }

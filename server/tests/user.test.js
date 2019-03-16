@@ -101,63 +101,63 @@ describe('User Test', async function () {
   it('Should not login (Empty Username)', async () => {
     const username = '   ';
     const login = gql`
-      mutation {
+      query {
         login(user: { username: "${username}", password: "20081997" }){
           username
         }
       }
     `;
-    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
+    const error = await client.query({ query: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
   it('Should not login (Empty Password)', async () => {
     const password = '   ';
     const login = gql`
-      mutation {
+      query {
         login(user: { username: "kaiskas", password:"${password}" }){
           username
         }
       }
     `;
-    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
+    const error = await client.query({ query: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
   it('Should not log in (Invalid username)', async () => {
     const login = gql`
-      mutation {
+      query {
         login(user: { username: "ASD4$@#!$!", password: "20081997" }) {
           username
         }
       }
     `;
-    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
+    const error = await client.query({ query: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
   it('Should not log in (Invalid password)', async () => {
     const login = gql`
-      mutation {
+      query {
         login(user: { username: "kaiskas", password: "20081997" }) {
           username
         }
       }
     `;
-    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
+    const error = await client.query({ query: login }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
   it('Should login', async () => {
     const login = gql`
-        mutation {
+        query {
           login(user: { username: "${createdUser.username}", password: "${createdUser.password}" }){
             username
           }
         }
       `;
 
-    const response = await client.mutate({ mutation: login });
+    const response = await client.query({ query: login });
     expect(response.data.login.username).to.equal(createdUser.username);
   });
 });
