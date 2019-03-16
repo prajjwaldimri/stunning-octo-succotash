@@ -7,5 +7,5 @@ type Query {
 
 type Mutation {
   createAccount(user: UserAccountInput): User
-  login(user: UserAccountInput):User
+  login(user: UserAccountInput): User
 }

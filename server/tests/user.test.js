@@ -7,11 +7,11 @@ require('@babel/polyfill');
 import 'cross-fetch/polyfill';
 
 import ApolloClient, { gql } from 'apollo-boost';
+import bcrypt from 'bcrypt';
 import app from '../src/server';
 
 app.listen(1337, '127.0.0.1');
 
-import mongoose from 'mongoose';
 import User from '../src/models/user';
 
 const { expect, assert } = require('chai');
@@ -20,11 +20,17 @@ const client = new ApolloClient({
   uri: 'http://localhost:1337/graphql',
 });
 
+const createdUser = { username: 'kaiskas', password: 'test1234' };
+
 describe('User Test', async function () {
   this.timeout(10000);
 
   before(async () => {
     await User.deleteMany({});
+    await User.create({
+      username: createdUser.username,
+      password: await bcrypt.hash(createdUser.password, 10),
+    });
   });
 
   it('Should create a user', async () => {
@@ -105,7 +111,19 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
-  it('Should not log in ( Invalid username and Password)', async () => {
+  it('Should not log in (Invalid username)', async () => {
+    const login = gql`
+      mutation {
+        login(user: { username: "ASD4$@#!$!", password: "20081997" }) {
+          username
+        }
+      }
+    `;
+    const error = await client.mutate({ mutation: login }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should not log in (Invalid password)', async () => {
     const login = gql`
       mutation {
         login(user: { username: "kaiskas", password: "20081997" }) {
@@ -118,16 +136,15 @@ describe('User Test', async function () {
   });
 
   it('Should login', async () => {
-    const username = 'kaiskas';
     const login = gql`
         mutation {
-          login(user: { username: "${username}", password: "password1234" }){
+          login(user: { username: "${createdUser.username}", password: "${createdUser.password}" }){
             username
           }
         }
       `;
 
     const response = await client.mutate({ mutation: login });
-    expect(response.data.login.username).to.equal(username);
+    expect(response.data.login.username).to.equal(createdUser.username);
   });
 });
