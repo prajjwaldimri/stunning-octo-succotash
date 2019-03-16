@@ -14,6 +14,11 @@ const createAccount = async (parent, args) => {
     throw new UserInputError('Password cannot be empty');
   }
 
+  const user = await User.findOne({ username: args.user.username });
+  if (user) {
+    throw new UserInputError('Username already exist');
+  }
+
   const hashedPassword = await bcrypt.hash(args.user.password, 10);
   return User.create({ username: args.user.username, password: hashedPassword });
 };

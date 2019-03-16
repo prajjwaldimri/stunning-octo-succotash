@@ -85,6 +85,19 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
+  it('Should not create a user(User already exist)', async () => {
+    const username = 'kaiskas';
+    const createAccount = gql`
+      mutation {
+        createAccount(user: { username: "${username}", password: "password1234"}){
+          username
+        }
+      }
+    `;
+    const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.not.equal(username);
+  });
+
   it('Should not login (Empty Username)', async () => {
     const username = '   ';
     const login = gql`
