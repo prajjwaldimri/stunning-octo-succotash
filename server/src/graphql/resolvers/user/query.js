@@ -1,6 +1,7 @@
 import validator from 'validator';
 import { UserInputError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from '../../../models/user';
 
 const login = async (parent, args) => {
@@ -22,7 +23,8 @@ const login = async (parent, args) => {
     throw new UserInputError('Username or password is/are wrong');
   }
 
-  return user;
+  const token = jwt.sign({ user: args.user.username }, process.env.JWT_SECRET_KEY);
+  return token;
 };
 
 module.exports = { login };

@@ -102,9 +102,7 @@ describe('User Test', async function () {
     const username = '   ';
     const login = gql`
       query {
-        login(user: { username: "${username}", password: "20081997" }){
-          username
-        }
+        login(user: { username: "${username}", password: "20081997" })
       }
     `;
     const error = await client.query({ query: login }).then(assert.fail, err => err);
@@ -115,9 +113,7 @@ describe('User Test', async function () {
     const password = '   ';
     const login = gql`
       query {
-        login(user: { username: "kaiskas", password:"${password}" }){
-          username
-        }
+        login(user: { username: "kaiskas", password:"${password}" })
       }
     `;
     const error = await client.query({ query: login }).then(assert.fail, err => err);
@@ -127,9 +123,7 @@ describe('User Test', async function () {
   it('Should not log in (Invalid username)', async () => {
     const login = gql`
       query {
-        login(user: { username: "ASD4$@#!$!", password: "20081997" }) {
-          username
-        }
+        login(user: { username: "ASD4$@#!$!", password: "20081997" })
       }
     `;
     const error = await client.query({ query: login }).then(assert.fail, err => err);
@@ -139,9 +133,7 @@ describe('User Test', async function () {
   it('Should not log in (Invalid password)', async () => {
     const login = gql`
       query {
-        login(user: { username: "kaiskas", password: "20081997" }) {
-          username
-        }
+        login(user: { username: "kaiskas", password: "20081997" })
       }
     `;
     const error = await client.query({ query: login }).then(assert.fail, err => err);
@@ -151,13 +143,11 @@ describe('User Test', async function () {
   it('Should login', async () => {
     const login = gql`
         query {
-          login(user: { username: "${createdUser.username}", password: "${createdUser.password}" }){
-            username
-          }
+          login(user: { username: "${createdUser.username}", password: "${createdUser.password}" })
         }
       `;
 
     const response = await client.query({ query: login });
-    expect(response.data.login.username).to.equal(createdUser.username);
+    expect(response.data.login).to.have.lengthOf.above(0);
   });
 });

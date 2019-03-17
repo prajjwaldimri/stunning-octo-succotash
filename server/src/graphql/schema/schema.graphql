@@ -3,7 +3,7 @@
 
 type Query {
   ping: String
-  login(user: UserAccountInput): User
+  login(user: UserAccountInput): String!
 }
 
 type Mutation {
