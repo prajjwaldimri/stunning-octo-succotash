@@ -44,6 +44,8 @@ describe('User Test', async function () {
     `;
     const response = await client.mutate({ mutation: createAccount });
     expect(response.data.createAccount.username).to.equal(username);
+    const user = await User.findOne({ username });
+    expect(user).to.not.be.null;
   });
 
   it('Should not create a user(Invalid username)', async () => {
@@ -57,6 +59,8 @@ describe('User Test', async function () {
     `;
     const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
+    const user = await User.findOne({ username });
+    expect(user).to.be.null;
   });
 
   it('Should not create a user(Empty username)', async () => {
@@ -70,6 +74,8 @@ describe('User Test', async function () {
     `;
     const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
+    const user = await User.findOne({ username });
+    expect(user).to.be.null;
   });
 
   it('Should not create a user(empty password)', async () => {
@@ -83,6 +89,8 @@ describe('User Test', async function () {
     `;
     const error = await client.mutate({ mutation: createAccount }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
+    const user = await User.findOne({ username: 'kaiskass' });
+    expect(user).to.be.null;
   });
 
   it('Should not create a user(User already exist)', async () => {
