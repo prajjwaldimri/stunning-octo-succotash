@@ -8,7 +8,7 @@
     "dev-client": "cd client && npm run dev",
     "dev-server": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nodemon --exec babel-node server/src/app.js",
     "start": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js",
-    "test": "NODE_ENV=test && rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit"
+    "test": "NODE_ENV=test && rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nyc mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit"
   },
   "repository": {
     "type": "git",
@@ -51,6 +51,7 @@
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "mocha": "^6.0.2",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "nyc": "^13.3.0"
   }
 }
