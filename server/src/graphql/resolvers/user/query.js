@@ -27,6 +27,12 @@ const login = async (parent, args) => {
   return token;
 };
 
+/**
+ * Creates a mongoose select string from the given graphql query
+ *
+ * @param  {Object} info - GraphQL resolver's info parameter
+ * @return {string} Returns a string which can be used as a select parameter in any mongoose query https://mongoosejs.com/docs/api.html#query_Query-select
+ */
 function generateMongooseSelectFieldsFromInfo(info) {
   return new Promise((resolve, reject) => {
     if (!info) {
