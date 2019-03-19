@@ -148,6 +148,7 @@ describe('User Test', async function () {
       `;
 
     const response = await client.query({ query: login });
+    // eslint-disable-next-line no-unused-expressions
     expect(response.data.login).to.not.be.null;
   });
 });
