@@ -1,5 +1,5 @@
 import validator from 'validator';
-import { UserInputError } from 'apollo-server-express';
+import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../../models/user';
@@ -23,10 +23,34 @@ const login = async (parent, args) => {
     throw new UserInputError('Username or password is/are wrong');
   }
 
-  const token = jwt.sign({ user: args.user.username }, process.env.JWT_SECRET_KEY);
+  const token = jwt.sign({ username: args.user.username }, process.env.JWT_SECRET_KEY);
   return token;
 };
 
-const profile = async (parent, args) => {};
+function generateMongooseSelectFieldsFromInfo(info) {
+  return new Promise((resolve, reject) => {
+    if (!info) {
+      reject(new Error('Info is null'));
+    }
+    let returnFields = '';
+    const selectionFields = info.operation.selectionSet.selections[0].selectionSet.selections;
+    for (const field of selectionFields) {
+      if (field.name.value !== '__typename') {
+        returnFields += field.name.value;
+        returnFields += ' ';
+      }
+    }
+    resolve(returnFields);
+  });
+}
+
+const profile = async (parent, args, { user }, info) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+  const mongooseSelectionFields = await generateMongooseSelectFieldsFromInfo(info);
+
+  return User.findOne({ username: user.username }, mongooseSelectionFields, { lean: true });
+};
 
 module.exports = { login, profile };

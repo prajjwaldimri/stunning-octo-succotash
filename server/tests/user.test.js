@@ -33,6 +33,7 @@ describe('User Test', async function () {
     await User.create({
       username: createdUser.username,
       password: await bcrypt.hash(createdUser.password, 10),
+      email: createdUser.email,
     });
 
     const login = gql`
@@ -185,6 +186,7 @@ describe('User Test', async function () {
       query {
         profile {
           email
+          username
         }
       }
     `;

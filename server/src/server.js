@@ -1,9 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import mongoose from 'mongoose';
 import consola from 'consola';
+import jsonwebtoken from 'jsonwebtoken';
 import schema from './graphql/schema/schema.graphql';
 import resolvers from './graphql/resolvers';
 
@@ -36,13 +37,33 @@ mongoose
   .then(() => {
     consola.ready({ message: 'Link established to database', badge: true });
   })
-  .catch((error) => {
-    console.log(error);
+  .catch(() => {
     consola.fatal({ message: 'No link to database.', badge: true });
   });
 mongoose.set('useCreateIndex', true);
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const verifyJWT = async (req) => {
+  const token = req.headers.authorization;
+
+  if (token) {
+    try {
+      return await jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
+    } catch (e) {
+      console.log(e);
+      throw new AuthenticationError('Your sessions has expired.');
+    }
+  }
+  return null;
+};
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: async ({ req }) => {
+    const user = await verifyJWT(req);
+    return { user };
+  },
+});
 
 const app = express();
 server.applyMiddleware({ app });
