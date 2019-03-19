@@ -8,7 +8,8 @@
     "dev-client": "cd client && npm run dev",
     "dev-server": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nodemon --exec babel-node server/src/app.js",
     "start": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js",
-    "test": "NODE_ENV=test && rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nyc mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit"
+    "test": "NODE_ENV=test && rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nyc mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit",
+    "test-with-coverage": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nyc --reporter=text-lcov npm test | codacy-coverage --token db8266bb18894834b7228c84b9c4177e --debug"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "apollo-server-express": "^2.4.8",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
+    "codacy-coverage": "^3.4.0",
     "concurrently": "^4.1.0",
     "consola": "^2.5.6",
     "cors": "^2.8.5",
@@ -32,6 +34,7 @@
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "jsonwebtoken": "^8.5.0",
+    "mocha-lcov-reporter": "^1.3.0",
     "mongoose": "^5.4.19",
     "validator": "^10.11.0"
   },
