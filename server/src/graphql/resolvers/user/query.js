@@ -27,4 +27,6 @@ const login = async (parent, args) => {
   return token;
 };
 
-module.exports = { login };
+const profile = async (parent, args) => {};
+
+module.exports = { login, profile };
