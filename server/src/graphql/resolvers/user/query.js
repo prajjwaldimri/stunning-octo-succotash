@@ -34,12 +34,13 @@ function generateMongooseSelectFieldsFromInfo(info) {
     }
     let returnFields = '';
     const selectionFields = info.operation.selectionSet.selections[0].selectionSet.selections;
-    for (const field of selectionFields) {
+
+    selectionFields.forEach((field) => {
       if (field.name.value !== '__typename') {
         returnFields += field.name.value;
         returnFields += ' ';
       }
-    }
+    });
     resolve(returnFields);
   });
 }
