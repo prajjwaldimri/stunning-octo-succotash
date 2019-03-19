@@ -148,6 +148,6 @@ describe('User Test', async function () {
       `;
 
     const response = await client.query({ query: login });
-    expect(response.data.login).to.have.lengthOf.above(0);
+    expect(response.data.login).to.not.be.null;
   });
 });
