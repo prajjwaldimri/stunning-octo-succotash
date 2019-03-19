@@ -49,7 +49,6 @@ const verifyJWT = async (req) => {
     try {
       return await jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
     } catch (e) {
-      console.log(e);
       throw new AuthenticationError('Your sessions has expired.');
     }
   }
