@@ -9,4 +9,6 @@ type Query {
 
 type Mutation {
   createAccount(user: UserAccountInput): User
+  follow(user:UserAccountInput):User
+  unfollow(user:UserAccountInput):User
 }

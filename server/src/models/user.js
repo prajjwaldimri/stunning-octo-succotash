@@ -15,6 +15,11 @@ const userSchema = new Schema({
     unique: true,
     sparse: true,
   },
+  following: {
+    type: String,
+    unique: true,
+    sparse: true,
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);
