@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable func-names */
 /* global it describe before */
 
@@ -20,7 +21,9 @@ const client = new ApolloClient({
   uri: 'http://localhost:1337/graphql',
 });
 
-const createdUser = { username: 'kaiskas', password: 'test1234' };
+let authenticatedClient;
+
+const createdUser = { username: 'kaiskas', password: 'test1234', email: 'kaiskas@kaiskas.com' };
 
 describe('User Test', async function () {
   this.timeout(10000);
@@ -30,6 +33,25 @@ describe('User Test', async function () {
     await User.create({
       username: createdUser.username,
       password: await bcrypt.hash(createdUser.password, 10),
+      email: createdUser.email,
+    });
+
+    const login = gql`
+        query {
+          login(user: { username: "${createdUser.username}", password: "${createdUser.password}" })
+        }
+      `;
+
+    const response = await client.query({ query: login });
+    authenticatedClient = new ApolloClient({
+      uri: 'http://localhost:1337/graphql',
+      request: async (operation) => {
+        operation.setContext({
+          headers: {
+            authorization: response.data.login,
+          },
+        });
+      },
     });
   });
 
@@ -156,7 +178,31 @@ describe('User Test', async function () {
       `;
 
     const response = await client.query({ query: login });
-    // eslint-disable-next-line no-unused-expressions
     expect(response.data.login).to.not.be.null;
+  });
+
+  it('Should return profile details', async () => {
+    const profile = gql`
+      query {
+        profile {
+          email
+          username
+        }
+      }
+    `;
+    const response = await authenticatedClient.query({ query: profile });
+    expect(response.data.profile.email).to.be.equal(createdUser.email);
+  });
+
+  it('Should not return profile details (Not Authenticated)', async () => {
+    const profile = gql`
+      query {
+        profile {
+          email
+        }
+      }
+    `;
+    const error = await client.query({ query: profile }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.length.of.above(0);
   });
 });
