@@ -16,7 +16,8 @@ const userSchema = new Schema({
     sparse: true,
   },
   following: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     unique: true,
     sparse: true,
   },
