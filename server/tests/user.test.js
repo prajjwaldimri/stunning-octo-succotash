@@ -28,7 +28,7 @@ const createdUser2 = { username: 'kaiskas1', password: 'test12', email: 'xyz@gma
 
 describe('User Test', async function () {
   this.timeout(100000);
-  let follower;
+  let userToBeFollowed;
 
   before(async () => {
     await User.collection.drop();
@@ -39,7 +39,7 @@ describe('User Test', async function () {
       email: createdUser.email,
     });
 
-    follower = await User.create({
+    userToBeFollowed = await User.create({
       username: createdUser2.username,
       password: await bcrypt.hash(createdUser2.password, 10),
       email: createdUser2.email,
@@ -220,20 +220,22 @@ describe('User Test', async function () {
     const followUser = gql`
 
     mutation{
-      followUser( id: "${follower.id}"){
+      followUser( id: "${userToBeFollowed.id}"){
         username
       }
     }
   `;
     const response = await client.mutate({ mutation: followUser });
-    expect(response.data.followUser.username).to.equal(follower.username);
+    expect(response.data.followUser.username).to.equal(userToBeFollowed.username);
+    const oneWhoFollows = await User.findOne({ username: response.data.followUser.username });
+    expect(oneWhoFollows.following.findOne(userToBeFollowed.id)).to.be.true;
   });
 
   it('Should not follow', async () => {
     const followUser = gql`
 
     mutation{
-      followUser( id: "${follower.id}"){
+      followUser( id: "${userToBeFollowed.id}"){
         username
       }
     }
