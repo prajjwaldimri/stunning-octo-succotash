@@ -23,4 +23,11 @@ const createAccount = async (parent, args) => {
   return User.create({ username: args.user.username, password: hashedPassword });
 };
 
-module.exports = { createAccount };
+const followUser = async (parent, args) => {
+
+};
+
+const unfollowUser = async (parent, args) => {
+
+};
+module.exports = { createAccount, followUser, unfollowUser };
