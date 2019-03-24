@@ -24,10 +24,24 @@ const createAccount = async (parent, args) => {
 };
 
 const followUser = async (parent, args) => {
-
+  const followe = User.findOne({ username: 'kaiskas' });
+  if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
+    throw new UserInputError('User id cannot be empty');
+  }
+  if (User.findById(args.id)) {
+    throw new UserInputError('user does not exist (wrong id provided)');
+  }
+  return User.findByIdAndUpdate(followe.id, { $push: { following: args.id } }, { new: true });
 };
 
 const unfollowUser = async (parent, args) => {
-
+  const followe = User.findOne({ username: 'kaiskas' });
+  if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
+    throw new UserInputError('User id cannot be empty');
+  }
+  if (User.findById(args.id)) {
+    throw new UserInputError('user does not exist (wrong id provided)');
+  }
+  return User.findByIdAndUpdate(followe.id, { $pull: { following: args.id } }, { new: true });
 };
 module.exports = { createAccount, followUser, unfollowUser };
