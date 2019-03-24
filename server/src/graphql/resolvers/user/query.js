@@ -2,6 +2,7 @@ import validator from 'validator';
 import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { ApolloError } from 'apollo-boost';
 import User from '../../../models/user';
 
 const login = async (parent, args) => {
@@ -55,9 +56,12 @@ const profile = async (parent, args, { user }, info) => {
   if (!user) {
     throw new AuthenticationError('You are not logged in!');
   }
-  const mongooseSelectionFields = await generateMongooseSelectFieldsFromInfo(info);
-
-  return User.findOne({ username: user.username }, mongooseSelectionFields, { lean: true });
+  try {
+    const mongooseSelectionFields = await generateMongooseSelectFieldsFromInfo(info);
+    return User.findOne({ username: user.username }, mongooseSelectionFields, { lean: true });
+  } catch (error) {
+    throw new ApolloError(error);
+  }
 };
 
 module.exports = { login, profile };
