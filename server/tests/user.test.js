@@ -79,7 +79,6 @@ describe('User Test', async function () {
     expect(user).to.not.be.null;
   });
 
-
   it('Should not create a user(Invalid username)', async () => {
     const username = '>>?./$@_,,';
     const createAccount = gql`
@@ -225,21 +224,20 @@ describe('User Test', async function () {
       }
     }
   `;
-    const response = await client.mutate({ mutation: followUser });
+    const response = await authenticatedClient.mutate({ mutation: followUser });
     expect(response.data.followUser.username).to.equal(userToBeFollowed.username);
     const oneWhoFollows = await User.findOne({ username: response.data.followUser.username });
     expect(oneWhoFollows.following.findOne(userToBeFollowed.id)).to.be.true;
   });
 
-  it('Should not follow', async () => {
+  it('Should not follow (Wrong user id)', async () => {
     const followUser = gql`
-
-    mutation{
-      followUser( id: "${userToBeFollowed.id}"){
-        username
+      mutation {
+        followUser(id: "          ") {
+          username
+        }
       }
-    }
-  `;
+    `;
     const error = await client.mutate({ mutation: followUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
