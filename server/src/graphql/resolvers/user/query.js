@@ -1,8 +1,7 @@
 import validator from 'validator';
-import { UserInputError, AuthenticationError } from 'apollo-server-express';
+import { UserInputError, AuthenticationError, ApolloError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { ApolloError } from 'apollo-boost';
 import User from '../../../models/user';
 
 const login = async (parent, args) => {
