@@ -26,9 +26,10 @@ let authenticatedClient;
 const createdUser = { username: 'kaiskas', password: 'test1234', email: 'kaiskas@kaiskas.com' };
 
 describe('User Test', async function () {
-  this.timeout(10000);
+  this.timeout(100000);
 
   before(async () => {
+    await User.collection.drop();
     await User.deleteMany({});
     await User.create({
       username: createdUser.username,

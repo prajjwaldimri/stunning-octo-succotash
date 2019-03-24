@@ -1,6 +1,4 @@
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
+import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new Schema({
   username: {
@@ -16,10 +14,8 @@ const userSchema = new Schema({
     sparse: true,
   },
   following: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: [Schema.Types.ObjectId],
     ref: 'User',
-    unique: true,
-    sparse: true,
   },
 });
 
