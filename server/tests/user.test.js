@@ -24,9 +24,11 @@ const client = new ApolloClient({
 let authenticatedClient;
 
 const createdUser = { username: 'kaiskas', password: 'test1234', email: 'kaiskas@kaiskas.com' };
+const createdUser2 = { username: 'kaiskas1', password: 'test12', email: 'xyz@gmail.com' };
 
 describe('User Test', async function () {
   this.timeout(100000);
+  let follower;
 
   before(async () => {
     await User.collection.drop();
@@ -35,6 +37,12 @@ describe('User Test', async function () {
       username: createdUser.username,
       password: await bcrypt.hash(createdUser.password, 10),
       email: createdUser.email,
+    });
+
+    follower = await User.create({
+      username: createdUser2.username,
+      password: await bcrypt.hash(createdUser2.password, 10),
+      email: createdUser2.email,
     });
 
     const login = gql`
@@ -70,6 +78,7 @@ describe('User Test', async function () {
     const user = await User.findOne({ username });
     expect(user).to.not.be.null;
   });
+
 
   it('Should not create a user(Invalid username)', async () => {
     const username = '>>?./$@_,,';
@@ -205,5 +214,18 @@ describe('User Test', async function () {
     `;
     const error = await client.query({ query: profile }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.length.of.above(0);
+  });
+
+  it('Should follow', async () => {
+    const followUser = gql`
+
+    mutation{
+      followUser( id: "${follower.id}"){
+        username
+      }
+    }
+  `;
+    const response = await client.mutate({ mutation: followUser });
+    expect(response.data.followUser.username).to.equal(follower.username);
   });
 });
