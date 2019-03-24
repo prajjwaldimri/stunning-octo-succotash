@@ -33,7 +33,7 @@ const followUser = async (parent, args, { user }) => {
   if (User.findById(args.id)) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
-  return User.findByIdAndUpdate(user.id, { $push: { following: args.id } }, { new: true });
+  return User.findOneAndUpdate({ username: user.username }, { $push: { following: args.id } }, { new: true });
 };
 
 const unfollowUser = async (parent, args, { user }) => {
@@ -46,6 +46,6 @@ const unfollowUser = async (parent, args, { user }) => {
   if (User.findById(args.id)) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
-  return User.findByIdAndUpdate(user.id, { $pull: { following: args.id } }, { new: true });
+  return User.findOneAndUpdate({ username: user.username }, { $pull: { following: args.id } }, { new: true });
 };
 module.exports = { createAccount, followUser, unfollowUser };
