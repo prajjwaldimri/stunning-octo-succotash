@@ -1,5 +1,5 @@
 import validator from 'validator';
-import { UserInputError } from 'apollo-server-express';
+import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import User from '../../../models/user';
 
@@ -23,25 +23,29 @@ const createAccount = async (parent, args) => {
   return User.create({ username: args.user.username, password: hashedPassword });
 };
 
-const followUser = async (parent, args) => {
-  const followe = User.findOne({ username: 'kaiskas' });
+const followUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
   if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
     throw new UserInputError('User id cannot be empty');
   }
   if (User.findById(args.id)) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
-  return User.findByIdAndUpdate(followe.id, { $push: { following: args.id } }, { new: true });
+  return User.findByIdAndUpdate(user.id, { $push: { following: args.id } }, { new: true });
 };
 
-const unfollowUser = async (parent, args) => {
-  const followe = User.findOne({ username: 'kaiskas' });
+const unfollowUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
   if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
     throw new UserInputError('User id cannot be empty');
   }
   if (User.findById(args.id)) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
-  return User.findByIdAndUpdate(followe.id, { $pull: { following: args.id } }, { new: true });
+  return User.findByIdAndUpdate(user.id, { $pull: { following: args.id } }, { new: true });
 };
 module.exports = { createAccount, followUser, unfollowUser };
