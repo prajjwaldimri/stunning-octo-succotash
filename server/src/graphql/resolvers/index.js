@@ -8,6 +8,8 @@ const resolvers = {
   },
   Mutation: {
     createAccount: user.createAccount,
+    followUser: user.followUser,
+    unfollowUser: user.unfollowUser,
   },
 };
 
