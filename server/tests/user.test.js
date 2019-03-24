@@ -226,10 +226,11 @@ describe('User Test', async function () {
   `;
     const response = await authenticatedClient.mutate({ mutation: followUser });
     // expect(response.data.followUser.username).to.equal(userToBeFollowed.username);
-    const oneWhoFollows = await User.findOne({ username: response.data.followUser.username });
-    console.log(oneWhoFollows.following);
-    console.log(userToBeFollowed.id.toString());
-    expect(oneWhoFollows.following.includes(`${userToBeFollowed.id}`)).to.be.true;
+    const oneWhoFollows = await User.findOne({
+      username: response.data.followUser.username,
+      following: { $elemMatch: { $eq: userToBeFollowed.id } },
+    });
+    expect(oneWhoFollows).to.be.not.null;
   });
 
   it('Should not follow (Wrong user id)', async () => {
