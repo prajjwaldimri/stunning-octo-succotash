@@ -30,7 +30,9 @@ const followUser = async (parent, args, { user }) => {
   if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
     throw new UserInputError('User id cannot be empty');
   }
-  if (User.findById(args.id)) {
+
+  const userFound = await User.findById(args.id);
+  if (!userFound) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
   return User.findOneAndUpdate(
@@ -47,7 +49,9 @@ const unfollowUser = async (parent, args, { user }) => {
   if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
     throw new UserInputError('User id cannot be empty');
   }
-  if (User.findById(args.id)) {
+
+  const userFound = await User.findById(args.id);
+  if (!userFound) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
   return User.findOneAndUpdate(
