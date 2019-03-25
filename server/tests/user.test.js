@@ -244,4 +244,33 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: followUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+
+  it('Should unfollow', async () => {
+    const unfollowUser = gql`
+      mutation {
+        unfollowUser(id: "${userToBeFollowed.id}") {
+          username
+        }
+      }
+    `;
+    const response = await authenticatedClient.mutate({ mutation: unfollowUser });
+    const oneWhoFollows = await User.findOne({
+      username: response.data.unfollowUser.username,
+      following: { $elemMatch: { $eq: userToBeFollowed.id } },
+    });
+    expect(oneWhoFollows).to.be.null;
+  });
+
+  it('Should not unfollow(Not Authenticated)', async () => {
+    const unfollowUser = gql`
+      mutation {
+        unfollowUser(id: "${userToBeFollowed.id}") {
+          username
+        }
+      }
+    `;
+
+    const error = await client.mutate({ mutation: unfollowUser }).then(assert.fail, err => err);
+    expect(error.graphQlErrors).to.have.length.above(0);
+  });
 });
