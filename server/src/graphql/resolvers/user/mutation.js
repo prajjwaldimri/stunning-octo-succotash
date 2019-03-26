@@ -2,6 +2,7 @@ import validator from 'validator';
 import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import User from '../../../models/user';
+import UserFollowing from '../../../models/userFollowing';
 
 const createAccount = async (parent, args) => {
   if (!validator.isAlphanumeric(args.user.username)) {
@@ -31,10 +32,20 @@ const followUser = async (parent, args, { user }) => {
     throw new UserInputError('User id cannot be empty');
   }
 
-  const userFound = await User.findById(args.id);
+  const userFound = await User.findById(args.id)
+    .lean()
+    .exec();
+
   if (!userFound) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
+
+  const currentUser = await User.findOne({ username: user.username })
+    .lean()
+    .exec();
+
+  await UserFollowing.create({ follower: currentUser.id, following: args.id });
+
   return User.findOneAndUpdate(
     { username: user.username },
     { $push: { following: args.id } },
@@ -54,6 +65,16 @@ const unfollowUser = async (parent, args, { user }) => {
   if (!userFound) {
     throw new UserInputError('user does not exist (wrong id provided)');
   }
+
+  const currentUser = await User.findOne({ username: user.username })
+    .lean()
+    .exec();
+
+  await UserFollowing.findOneAndDelete({
+    follower: currentUser.id,
+    following: args.id,
+  });
+
   return User.findOneAndUpdate(
     { username: user.username },
     { $pull: { following: args.id } },

@@ -3,6 +3,7 @@ import { UserInputError, AuthenticationError, ApolloError } from 'apollo-server-
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../../models/user';
+import UserFollowing from '../../../models/userFollowing';
 
 const login = async (parent, args) => {
   if (validator.isEmpty(args.user.username, { ignore_whitespace: true })) {
@@ -63,4 +64,32 @@ const profile = async (parent, args, { user }, info) => {
   }
 };
 
-module.exports = { login, profile };
+const getFollowersOfUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+
+  const currentUser = await User.findOne({ username: user.username })
+    .lean()
+    .exec();
+
+  return UserFollowing.find({ following: currentUser.id })
+    .populate('follower')
+    .select('follower')
+    .lean()
+    .exec();
+};
+
+const getFollowingOfUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+  return User.findOne({ username: user.username }, 'following', { lean: true });
+};
+
+module.exports = {
+  login,
+  profile,
+  getFollowersOfUser,
+  getFollowingOfUser,
+};

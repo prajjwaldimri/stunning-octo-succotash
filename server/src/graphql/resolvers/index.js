@@ -5,6 +5,8 @@ const resolvers = {
     ping: () => 'Pong',
     login: user.login,
     profile: user.profile,
+    getFollowersOfUser: user.getFollowersOfUser,
+    getFollowingOfUser: user.getFollowingOfUser,
   },
   Mutation: {
     createAccount: user.createAccount,
