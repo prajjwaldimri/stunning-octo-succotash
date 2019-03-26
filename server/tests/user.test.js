@@ -9,6 +9,7 @@ import 'cross-fetch/polyfill';
 
 import ApolloClient, { gql } from 'apollo-boost';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 import app from '../src/server';
 
 app.listen(1337, '127.0.0.1');
@@ -217,15 +218,13 @@ describe('User Test', async function () {
 
   it('Should follow', async () => {
     const followUser = gql`
-
-    mutation{
-      followUser( id: "${userToBeFollowed.id}"){
-        username
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
       }
-    }
-  `;
+   `;
     const response = await authenticatedClient.mutate({ mutation: followUser });
-    // expect(response.data.followUser.username).to.equal(userToBeFollowed.username);
     const oneWhoFollows = await User.findOne({
       username: response.data.followUser.username,
       following: { $elemMatch: { $eq: userToBeFollowed.id } },
@@ -233,16 +232,42 @@ describe('User Test', async function () {
     expect(oneWhoFollows).to.be.not.null;
   });
 
-  it('Should not follow (Wrong user id)', async () => {
+  it('Should not follow (Not Authenticated)', async () => {
     const followUser = gql`
       mutation {
-        followUser(id: "          ") {
+        followUser(id: "${userToBeFollowed.id}") {
           username
         }
       }
     `;
     const error = await client.mutate({ mutation: followUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should not follow (Empty user id)', async () => {
+    const followUser = gql`
+      mutation {
+        followUser(id: "        ") {
+          username
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: followUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.length.above(0);
+  });
+
+  it('Should not follow (Wrong user id)', async () => {
+    const followUser = gql`
+      mutation {
+        followUser(id: "${mongoose.Types.ObjectId()}") {
+          username
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: followUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.length.above(0);
   });
 
   it('Should unfollow', async () => {
@@ -271,6 +296,6 @@ describe('User Test', async function () {
     `;
 
     const error = await client.mutate({ mutation: unfollowUser }).then(assert.fail, err => err);
-    expect(error.graphQlErrors).to.have.length.above(0);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 });
