@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import validator from 'validator';
 import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
@@ -43,6 +44,15 @@ const followUser = async (parent, args, { user }) => {
   const currentUser = await User.findOne({ username: user.username })
     .lean()
     .exec();
+
+  const isUserAlreadyFollowing = await UserFollowing.findOne({
+    follower: currentUser._id,
+    following: args.id,
+  });
+
+  if (isUserAlreadyFollowing) {
+    throw new UserInputError('Already following the provided user');
+  }
 
   await UserFollowing.create({ follower: currentUser._id, following: args.id });
 
