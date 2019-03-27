@@ -275,7 +275,20 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.length.above(0);
   });
 
-  it('Should not refollow a user (Duplicate follow mutation)', async () => {});
+  it('Should not refollow a user (Duplicate follow mutation)', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    await authenticatedClient.mutate({ mutation: followUser });
+    const error = await authenticatedClient
+      .mutate({ mutation: followUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 
   it('Should unfollow', async () => {
     const unfollowUser = gql`
