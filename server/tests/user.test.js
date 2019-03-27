@@ -298,4 +298,26 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: unfollowUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+
+  it('Should get following of user', async () => {
+    const followUser = gql`
+        mutation{
+          followUser( id: "${userToBeFollowed.id}"){
+            username
+          }
+        }
+     `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getFollowingOfUser = gql`
+        query {
+          getFollowingOfUser {
+            username
+          }
+        }
+      `;
+
+    const response = await authenticatedClient.query({ query: getFollowingOfUser });
+    expect(response.data.getFollowingOfUser).to.not.be.null;
+  });
 });
