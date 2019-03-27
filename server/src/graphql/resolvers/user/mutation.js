@@ -44,7 +44,7 @@ const followUser = async (parent, args, { user }) => {
     .lean()
     .exec();
 
-  await UserFollowing.create({ follower: currentUser.id, following: args.id });
+  await UserFollowing.create({ follower: currentUser._id, following: args.id });
 
   return User.findOneAndUpdate(
     { username: user.username },
