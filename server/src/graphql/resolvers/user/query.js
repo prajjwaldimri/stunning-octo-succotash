@@ -84,12 +84,12 @@ const getFollowingOfUser = async (parent, args, { user }) => {
   if (!user) {
     throw new AuthenticationError('You are not logged in!');
   }
-  const followings = await User.findOne({ username: user.username })
+  const currentUser = await User.findOne({ username: user.username })
     .populate('following')
     .select('following')
     .lean()
     .exec();
-  return followings;
+  return currentUser.following;
 };
 
 module.exports = {
