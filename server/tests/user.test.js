@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable func-names */
-/* global it describe before */
+/* global it describe before beforeEach */
 
 require('@babel/polyfill/noConflict');
 require('@babel/polyfill');
@@ -33,6 +33,9 @@ describe('User Test', async function () {
 
   before(async () => {
     await User.collection.drop();
+  });
+
+  beforeEach(async () => {
     await User.deleteMany({});
     await User.create({
       username: createdUser.username,
