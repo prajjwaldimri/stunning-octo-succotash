@@ -71,7 +71,7 @@ const unfollowUser = async (parent, args, { user }) => {
     .exec();
 
   await UserFollowing.findOneAndDelete({
-    follower: currentUser.id,
+    follower: currentUser._id,
     following: args.id,
   });
 
