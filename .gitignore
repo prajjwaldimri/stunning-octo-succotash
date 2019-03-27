@@ -1,6 +1,7 @@
 # Generated folders
 /server/public/
 /server/dist/
+.vscode/
 
 # Logs
 logs
