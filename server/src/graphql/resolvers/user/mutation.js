@@ -80,6 +80,15 @@ const unfollowUser = async (parent, args, { user }) => {
     .lean()
     .exec();
 
+  const isUserAlreadyFollowing = await UserFollowing.findOne({
+    follower: currentUser._id,
+    following: args.id,
+  });
+
+  if (!isUserAlreadyFollowing) {
+    throw new UserInputError('Not following provided user(first follow to unfollow)');
+  }
+
   await UserFollowing.findOneAndDelete({
     follower: currentUser._id,
     following: args.id,

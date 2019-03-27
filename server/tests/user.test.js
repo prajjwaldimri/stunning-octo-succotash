@@ -291,6 +291,16 @@ describe('User Test', async function () {
   });
 
   it('Should unfollow', async () => {
+    // first follow a user so that it can be unfollowed later
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
     const unfollowUser = gql`
       mutation {
         unfollowUser(id: "${userToBeFollowed.id}") {
@@ -319,7 +329,31 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
-  it('Should not reunfollow a user (Duplicate unfollow mutation)', async () => {});
+  it('Should not reunfollow a user (Duplicate unfollow mutation)', async () => {
+    // first follow a user so that it can be unfollowed later
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const unfollowUser = gql`
+      mutation{
+        unfollowUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    await authenticatedClient.mutate({ mutation: unfollowUser });
+
+    const error = await authenticatedClient
+      .mutate({ mutation: unfollowUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 
   it('Should get following of user', async () => {
     const followUser = gql`
