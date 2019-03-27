@@ -84,7 +84,11 @@ const getFollowingOfUser = async (parent, args, { user }) => {
   if (!user) {
     throw new AuthenticationError('You are not logged in!');
   }
-  return User.findOne({ username: user.username }, 'following', { lean: true });
+  return User.findOne({ username: user.username })
+    .populate('following')
+    .select('following')
+    .lean()
+    .exec();
 };
 
 module.exports = {
