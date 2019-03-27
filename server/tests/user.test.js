@@ -255,7 +255,8 @@ describe('User Test', async function () {
         }
       }
     `;
-    const error = await authenticatedClient.mutate({ mutation: followUser })
+    const error = await authenticatedClient
+      .mutate({ mutation: followUser })
       .then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.length.above(0);
   });
@@ -268,10 +269,13 @@ describe('User Test', async function () {
         }
       }
     `;
-    const error = await authenticatedClient.mutate({ mutation: followUser })
+    const error = await authenticatedClient
+      .mutate({ mutation: followUser })
       .then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.length.above(0);
   });
+
+  it('Should not refollow a user (Duplicate follow mutation)', async () => {});
 
   it('Should unfollow', async () => {
     const unfollowUser = gql`
@@ -302,6 +306,8 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
+  it('Should not reunfollow a user (Duplicate unfollow mutation)', async () => {});
+
   it('Should get following of user', async () => {
     const followUser = gql`
         mutation{
@@ -313,14 +319,20 @@ describe('User Test', async function () {
     await authenticatedClient.mutate({ mutation: followUser });
 
     const getFollowingOfUser = gql`
-        query {
-          getFollowingOfUser {
-            username
-          }
+      query {
+        getFollowingOfUser {
+          username
         }
-      `;
+      }
+    `;
 
     const response = await authenticatedClient.query({ query: getFollowingOfUser });
     expect(response.data.getFollowingOfUser).to.not.be.null;
   });
+
+  it('should not get followings of user (Not logged in)', async () => {});
+
+  it('should get followers of user', async () => {});
+
+  it('should not get followers of user (Not logged in)', async () => {});
 });
