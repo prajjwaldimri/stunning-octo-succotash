@@ -328,7 +328,19 @@ describe('User Test', async function () {
     const error = await client.mutate({ mutation: unfollowUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
-
+  it('Should not unfollow (Wrong user id)', async () => {
+    const unfollowUser = gql`
+      mutation {
+        unfollowUser(id: "${mongoose.Types.ObjectId()}") {
+          username
+        }
+      }
+    `;
+    const error = await authenticatedClient
+      .mutate({ mutation: unfollowUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.length.above(0);
+  });
   it('Should not reunfollow a user (Duplicate unfollow mutation)', async () => {
     // first follow a user so that it can be unfollowed later
     const followUser = gql`
