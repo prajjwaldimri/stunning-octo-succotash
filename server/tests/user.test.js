@@ -411,7 +411,27 @@ describe('User Test', async function () {
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 
-  it('should get followers of user', async () => {});
+  it('should get followers of user', async () => {
+    const followUser = gql`
+        mutation{
+          followUser( id: "${userToBeFollowed.id}"){
+            username
+          }
+        }
+     `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getFollowersOfUser = gql`
+      query {
+        getFollowersOfUser( id: "${userToBeFollowed.id}") {
+          username
+        }
+      }
+    `;
+
+    const response = await authenticatedClient.query({ query: getFollowersOfUser });
+    expect(response.data.getFollowersOfUser).to.not.be.null;
+  });
 
   it('should not get followers of user (Not logged in)', async () => {});
 });
