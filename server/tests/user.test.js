@@ -433,5 +433,77 @@ describe('User Test', async function () {
     expect(response.data.getFollowersOfUser).to.not.be.null;
   });
 
-  it('should not get followers of user (Not logged in)', async () => {});
+  it('should not get followers of user (Not logged in)', async () => {
+    const followUser = gql`
+    mutation{
+      followUser( id: "${userToBeFollowed.id}"){
+        username
+      }
+    }
+  `;
+  await authenticatedClient.mutate({ mutation: followUser });
+
+  const getFollowersOfUser = gql`
+    query {
+      getFollowersOfUser( id: "${userToBeFollowed.id}") {
+        username
+      }
+    }
+  `;
+
+  const error = await client.query({ query: getFollowersOfUser }).then(assert.fail, err => err);
+  expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
