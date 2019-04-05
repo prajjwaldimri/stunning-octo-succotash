@@ -341,6 +341,7 @@ describe('User Test', async function () {
       .then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.length.above(0);
   });
+
   it('Should not reunfollow a user (Duplicate unfollow mutation)', async () => {
     // first follow a user so that it can be unfollowed later
     const followUser = gql`
@@ -358,7 +359,7 @@ describe('User Test', async function () {
           username
         }
       }
-   `;
+    `;
     await authenticatedClient.mutate({ mutation: unfollowUser });
 
     const error = await authenticatedClient
@@ -369,12 +370,12 @@ describe('User Test', async function () {
 
   it('Should get following of user', async () => {
     const followUser = gql`
-        mutation{
-          followUser( id: "${userToBeFollowed.id}"){
-            username
-          }
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
         }
-     `;
+      }
+    `;
     await authenticatedClient.mutate({ mutation: followUser });
 
     const getFollowingOfUser = gql`
@@ -391,12 +392,12 @@ describe('User Test', async function () {
 
   it('should not get followings of user (Not logged in)', async () => {
     const followUser = gql`
-        mutation{
-          followUser( id: "${userToBeFollowed.id}"){
-            username
-          }
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
         }
-     `;
+      }
+    `;
     await authenticatedClient.mutate({ mutation: followUser });
 
     const getFollowingOfUser = gql`
@@ -424,7 +425,7 @@ describe('User Test', async function () {
     // TODO: Why are you supplying an id to this query? Nashe main hai kya bro?
     const getFollowersOfUser = gql`
       query {
-        getFollowersOfUser( id: "${userToBeFollowed.id}") {
+        getFollowersOfUser {
           username
         }
       }
@@ -436,22 +437,22 @@ describe('User Test', async function () {
 
   it('should not get followers of user (Not logged in)', async () => {
     const followUser = gql`
-    mutation{
-      followUser( id: "${userToBeFollowed.id}"){
-        username
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
       }
-    }
-  `;
+    `;
     await authenticatedClient.mutate({ mutation: followUser });
 
     // TODO: Copy paste karo par thoda dimaag to lagao uske baad.
     const getFollowersOfUser = gql`
-    query {
-      getFollowersOfUser( id: "${userToBeFollowed.id}") {
-        username
+      query {
+        getFollowersOfUser {
+          username
+        }
       }
-    }
-  `;
+    `;
 
     const error = await client.query({ query: getFollowersOfUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
