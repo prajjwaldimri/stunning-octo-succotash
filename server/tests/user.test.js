@@ -421,6 +421,7 @@ describe('User Test', async function () {
      `;
     await authenticatedClient.mutate({ mutation: followUser });
 
+    // TODO: Why are you supplying an id to this query? Nashe main hai kya bro?
     const getFollowersOfUser = gql`
       query {
         getFollowersOfUser( id: "${userToBeFollowed.id}") {
@@ -441,9 +442,10 @@ describe('User Test', async function () {
       }
     }
   `;
-  await authenticatedClient.mutate({ mutation: followUser });
+    await authenticatedClient.mutate({ mutation: followUser });
 
-  const getFollowersOfUser = gql`
+    // TODO: Copy paste karo par thoda dimaag to lagao uske baad.
+    const getFollowersOfUser = gql`
     query {
       getFollowersOfUser( id: "${userToBeFollowed.id}") {
         username
@@ -451,59 +453,7 @@ describe('User Test', async function () {
     }
   `;
 
-  const error = await client.query({ query: getFollowersOfUser }).then(assert.fail, err => err);
-  expect(error.graphQLErrors).to.have.lengthOf.above(0);
+    const error = await client.query({ query: getFollowersOfUser }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

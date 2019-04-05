@@ -73,7 +73,7 @@ const getFollowersOfUser = async (parent, args, { user }) => {
     .lean()
     .exec();
 
-  return UserFollowing.find({ following: currentUser.id })
+  return UserFollowing.find({ following: currentUser._id })
     .populate('follower')
     .select('follower')
     .lean()
