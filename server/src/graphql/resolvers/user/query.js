@@ -92,11 +92,17 @@ const getFollowingOfUser = async (parent, args, { user }) => {
   return currentUser.following;
 };
 
+const getCountOfFollowers = async (parent, args) => {
+
+};
+const getCountOfFollowing = async (parent, args) => {
+
+};
 module.exports = {
   login,
   profile,
   getFollowersOfUser,
   getFollowingOfUser,
-  getCountofFollowers,
-  getCountofFollowing,
+  getCountOfFollowers,
+  getCountOfFollowing,
 };
