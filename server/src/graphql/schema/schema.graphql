@@ -13,6 +13,6 @@ type Query {
 
 type Mutation {
   createAccount(user: UserAccountInput): User
-  followUser(username: String!): User
-  unfollowUser(username: String!): User
+  followUser(id: ID!): User
+  unfollowUser(id: ID!): User
 }
