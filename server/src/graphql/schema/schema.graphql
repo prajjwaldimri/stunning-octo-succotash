@@ -7,6 +7,8 @@ type Query {
   profile: User!
   getFollowersOfUser: [User]
   getFollowingOfUser: [User]
+  getCountOfFollowers:String
+  getCountOfFollowing:String
 }
 
 type Mutation {
