@@ -69,15 +69,15 @@ const getFollowersOfUser = async (parent, args, { user }) => {
     throw new AuthenticationError('You are not logged in!');
   }
 
-  const currentUser = await User.findOne({ username: user.username })
+  const currentUser = await User.findOne({ username: user.username });
+
+  let followers = await UserFollowing.find({ following: currentUser._id }, 'follower')
+    .populate('follower', 'username')
     .lean()
     .exec();
 
-  return UserFollowing.find({ following: currentUser._id })
-    .populate('follower')
-    .select('follower')
-    .lean()
-    .exec();
+  followers = followers.map(data => data.follower);
+  return followers;
 };
 
 const getFollowingOfUser = async (parent, args, { user }) => {
