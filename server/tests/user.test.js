@@ -24,6 +24,7 @@ const client = new ApolloClient({
 });
 
 let authenticatedClient;
+let authenticatedClient2;
 
 const createdUser = { username: 'kaiskas', password: 'test1234', email: 'kaiskas@kaiskas.com' };
 const createdUser2 = { username: 'kaiskas1', password: 'test12', email: 'xyz@gmail.com' };
@@ -64,6 +65,24 @@ describe('User Test', async function () {
         operation.setContext({
           headers: {
             authorization: response.data.login,
+          },
+        });
+      },
+    });
+
+    const login2 = gql`
+        query {
+          login(user: { username: "${createdUser2.username}", password: "${createdUser2.password}" })
+        }
+      `;
+
+    const response2 = await client.query({ query: login2 });
+    authenticatedClient2 = new ApolloClient({
+      uri: 'http://localhost:1337/graphql',
+      request: async (operation) => {
+        operation.setContext({
+          headers: {
+            authorization: response2.data.login,
           },
         });
       },
@@ -433,7 +452,8 @@ describe('User Test', async function () {
       }
     `;
 
-    const response = await authenticatedClient.query({ query: getFollowersOfUser });
+    const response = await authenticatedClient2.query({ query: getFollowersOfUser });
+    console.log(response.data);
     expect(response.data.getFollowersOfUser).to.not.be.null;
   });
 
