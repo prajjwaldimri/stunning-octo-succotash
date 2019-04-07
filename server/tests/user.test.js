@@ -443,7 +443,6 @@ describe('User Test', async function () {
      `;
     await authenticatedClient.mutate({ mutation: followUser });
 
-    // TODO: Why are you supplying an id to this query? Nashe main hai kya bro?
     const getFollowersOfUser = gql`
       query {
         getFollowersOfUser {
@@ -467,7 +466,6 @@ describe('User Test', async function () {
     `;
     await authenticatedClient.mutate({ mutation: followUser });
 
-    // TODO: Copy paste karo par thoda dimaag to lagao uske baad.
     const getFollowersOfUser = gql`
       query {
         getFollowersOfUser {

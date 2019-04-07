@@ -97,4 +97,6 @@ module.exports = {
   profile,
   getFollowersOfUser,
   getFollowingOfUser,
+  getCountofFollowers,
+  getCountofFollowing,
 };
