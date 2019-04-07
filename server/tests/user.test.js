@@ -15,6 +15,7 @@ import app from '../src/server';
 app.listen(1337, '127.0.0.1');
 
 import User from '../src/models/user';
+import UserFollowing from '../src/models/userFollowing';
 
 const { expect, assert } = require('chai');
 
@@ -33,6 +34,7 @@ describe('User Test', async function () {
 
   before(async () => {
     await User.collection.drop();
+    await UserFollowing.collection.drop();
   });
 
   beforeEach(async () => {
