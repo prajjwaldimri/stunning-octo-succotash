@@ -477,4 +477,44 @@ describe('User Test', async function () {
     const error = await client.query({ query: getFollowersOfUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+ 
+  it('Should get following count of user', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getCountOfFollowing = gql`
+      query {
+        getCountOfFollowing
+      }
+    `;
+
+    const response = await authenticatedClient.query({ query: getCountOfFollowing });
+    expect(Number(response.data.getCountOfFollowing)).to.be.greaterThan(0);
+  });
+
+  it('Should get followers count of user', async () => {
+    const followUser = gql`
+        mutation{
+          followUser( id: "${userToBeFollowed.id}"){
+            username
+          }
+        }
+     `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getCountOfFollowers = gql`
+      query {
+        getCountOfFollowers
+      }
+    `;
+
+    const response = await authenticatedClient2.query({ query: getCountOfFollowers });
+    expect(Number(response.data.getCountOfFollowers)).to.be.greaterThan(0);
+  });
 });
