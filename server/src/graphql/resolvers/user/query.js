@@ -92,12 +92,29 @@ const getFollowingOfUser = async (parent, args, { user }) => {
   return currentUser.following;
 };
 
-const getCountOfFollowers = async (parent, args) => {
+const getCountOfFollowers = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
 
-};
-const getCountOfFollowing = async (parent, args) => {
+  const currentUser = await User.findOne({ username: user.username }).exec();
 
+  const followersCount = await UserFollowing.countDocuments({ following: currentUser.id })
+    .exec();
+  return followersCount;
 };
+
+const getCountOfFollowing = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+
+  const currentUser = await User.findOne({ username: user.username }).exec();
+  const followingCount = await UserFollowing.countDocuments({ follower: currentUser.id })
+    .exec();
+  return followingCount;
+};
+
 module.exports = {
   login,
   profile,
