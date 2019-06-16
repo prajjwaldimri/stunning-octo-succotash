@@ -1,5 +1,5 @@
 import validator from 'validator';
-import { UserInputError, AuthenticationError, ApolloError } from 'apollo-server-express';
+import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../../models/user';
@@ -56,12 +56,8 @@ const profile = async (parent, args, { user }, info) => {
   if (!user) {
     throw new AuthenticationError('You are not logged in!');
   }
-  try {
-    const mongooseSelectionFields = await generateMongooseSelectFieldsFromInfo(info);
-    return User.findOne({ username: user.username }, mongooseSelectionFields, { lean: true });
-  } catch (error) {
-    throw new ApolloError(error);
-  }
+  const mongooseSelectionFields = await generateMongooseSelectFieldsFromInfo(info);
+  return User.findOne({ username: user.username }, mongooseSelectionFields, { lean: true });
 };
 
 const getFollowersOfUser = async (parent, args, { user }) => {
@@ -71,6 +67,7 @@ const getFollowersOfUser = async (parent, args, { user }) => {
 
   const currentUser = await User.findOne({ username: user.username });
 
+  // eslint-disable-next-line no-underscore-dangle
   let followers = await UserFollowing.find({ following: currentUser._id }, 'follower')
     .populate('follower', 'username')
     .lean()

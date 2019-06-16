@@ -452,7 +452,6 @@ describe('User Test', async function () {
     `;
 
     const response = await authenticatedClient2.query({ query: getFollowersOfUser });
-    console.log(response.data);
     expect(response.data.getFollowersOfUser).to.not.be.null;
   });
 
@@ -477,7 +476,7 @@ describe('User Test', async function () {
     const error = await client.query({ query: getFollowersOfUser }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
- 
+
   it('Should get following count of user', async () => {
     const followUser = gql`
       mutation{
