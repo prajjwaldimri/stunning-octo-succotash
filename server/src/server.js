@@ -33,6 +33,8 @@ mongoose
     poolSize: 10, // Maintain up to 10 socket connections
     // If not connected, return errors immediately rather than waiting for reconnect
     bufferMaxEntries: 0,
+    autoIndex: true,
+    useCreateIndex: true,
   })
   .then(() => {
     consola.ready({ message: 'Link established to database', badge: true });

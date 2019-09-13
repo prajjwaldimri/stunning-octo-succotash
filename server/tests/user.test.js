@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable func-names */
-/* global it describe before */
+/* global it describe before beforeEach */
 
 require('@babel/polyfill/noConflict');
 require('@babel/polyfill');
@@ -9,11 +9,13 @@ import 'cross-fetch/polyfill';
 
 import ApolloClient, { gql } from 'apollo-boost';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 import app from '../src/server';
 
 app.listen(1337, '127.0.0.1');
 
 import User from '../src/models/user';
+import UserFollowing from '../src/models/userFollowing';
 
 const { expect, assert } = require('chai');
 
@@ -22,18 +24,32 @@ const client = new ApolloClient({
 });
 
 let authenticatedClient;
+let authenticatedClient2;
 
 const createdUser = { username: 'kaiskas', password: 'test1234', email: 'kaiskas@kaiskas.com' };
+const createdUser2 = { username: 'kaiskas1', password: 'test12', email: 'xyz@gmail.com' };
 
 describe('User Test', async function () {
-  this.timeout(10000);
+  this.timeout(100000);
+  let userToBeFollowed;
 
   before(async () => {
+    await User.collection.drop();
+    await UserFollowing.collection.drop();
+  });
+
+  beforeEach(async () => {
     await User.deleteMany({});
     await User.create({
       username: createdUser.username,
       password: await bcrypt.hash(createdUser.password, 10),
       email: createdUser.email,
+    });
+
+    userToBeFollowed = await User.create({
+      username: createdUser2.username,
+      password: await bcrypt.hash(createdUser2.password, 10),
+      email: createdUser2.email,
     });
 
     const login = gql`
@@ -49,6 +65,24 @@ describe('User Test', async function () {
         operation.setContext({
           headers: {
             authorization: response.data.login,
+          },
+        });
+      },
+    });
+
+    const login2 = gql`
+        query {
+          login(user: { username: "${createdUser2.username}", password: "${createdUser2.password}" })
+        }
+      `;
+
+    const response2 = await client.query({ query: login2 });
+    authenticatedClient2 = new ApolloClient({
+      uri: 'http://localhost:1337/graphql',
+      request: async (operation) => {
+        operation.setContext({
+          headers: {
+            authorization: response2.data.login,
           },
         });
       },
@@ -204,5 +238,282 @@ describe('User Test', async function () {
     `;
     const error = await client.query({ query: profile }).then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.length.of.above(0);
+  });
+
+  it('Should follow', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    const response = await authenticatedClient.mutate({ mutation: followUser });
+    const oneWhoFollows = await User.findOne({
+      username: response.data.followUser.username,
+      following: { $elemMatch: { $eq: userToBeFollowed.id } },
+    });
+    expect(oneWhoFollows).to.be.not.null;
+  });
+
+  it('Should not follow (Not Authenticated)', async () => {
+    const followUser = gql`
+      mutation {
+        followUser(id: "${userToBeFollowed.id}") {
+          username
+        }
+      }
+    `;
+    const error = await client.mutate({ mutation: followUser }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should not follow (Empty user id)', async () => {
+    const followUser = gql`
+      mutation {
+        followUser(id: "        ") {
+          username
+        }
+      }
+    `;
+    const error = await authenticatedClient
+      .mutate({ mutation: followUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.length.above(0);
+  });
+
+  it('Should not follow (Wrong user id)', async () => {
+    const followUser = gql`
+      mutation {
+        followUser(id: "${mongoose.Types.ObjectId()}") {
+          username
+        }
+      }
+    `;
+    const error = await authenticatedClient
+      .mutate({ mutation: followUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.length.above(0);
+  });
+
+  it('Should not refollow a user (Duplicate follow mutation)', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    await authenticatedClient.mutate({ mutation: followUser });
+    const error = await authenticatedClient
+      .mutate({ mutation: followUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should unfollow', async () => {
+    // first follow a user so that it can be unfollowed later
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const unfollowUser = gql`
+      mutation {
+        unfollowUser(id: "${userToBeFollowed.id}") {
+          username
+        }
+      }
+    `;
+    const response = await authenticatedClient.mutate({ mutation: unfollowUser });
+    const oneWhoFollows = await User.findOne({
+      username: response.data.unfollowUser.username,
+      following: { $elemMatch: { $eq: userToBeFollowed.id } },
+    });
+    expect(oneWhoFollows).to.be.null;
+  });
+
+  it('Should not unfollow(Not Authenticated)', async () => {
+    const unfollowUser = gql`
+      mutation {
+        unfollowUser(id: "${userToBeFollowed.id}") {
+          username
+        }
+      }
+    `;
+
+    const error = await client.mutate({ mutation: unfollowUser }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+  it('Should not unfollow (Wrong user id)', async () => {
+    const unfollowUser = gql`
+      mutation {
+        unfollowUser(id: "${mongoose.Types.ObjectId()}") {
+          username
+        }
+      }
+    `;
+    const error = await authenticatedClient
+      .mutate({ mutation: unfollowUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.length.above(0);
+  });
+
+  it('Should not reunfollow a user (Duplicate unfollow mutation)', async () => {
+    // first follow a user so that it can be unfollowed later
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+   `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const unfollowUser = gql`
+      mutation{
+        unfollowUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: unfollowUser });
+
+    const error = await authenticatedClient
+      .mutate({ mutation: unfollowUser })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should get following of user', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getFollowingOfUser = gql`
+      query {
+        getFollowingOfUser {
+          username
+        }
+      }
+    `;
+
+    const response = await authenticatedClient.query({ query: getFollowingOfUser });
+    expect(response.data.getFollowingOfUser).to.not.be.null;
+  });
+
+  it('should not get followings of user (Not logged in)', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getFollowingOfUser = gql`
+      query {
+        getFollowingOfUser {
+          username
+        }
+      }
+    `;
+
+    const error = await client.query({ query: getFollowingOfUser }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('should get followers of user', async () => {
+    const followUser = gql`
+        mutation{
+          followUser( id: "${userToBeFollowed.id}"){
+            username
+          }
+        }
+     `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getFollowersOfUser = gql`
+      query {
+        getFollowersOfUser {
+          username
+        }
+      }
+    `;
+
+    const response = await authenticatedClient2.query({ query: getFollowersOfUser });
+    expect(response.data.getFollowersOfUser).to.not.be.null;
+  });
+
+  it('should not get followers of user (Not logged in)', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getFollowersOfUser = gql`
+      query {
+        getFollowersOfUser {
+          username
+        }
+      }
+    `;
+
+    const error = await client.query({ query: getFollowersOfUser }).then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should get following count of user', async () => {
+    const followUser = gql`
+      mutation{
+        followUser( id: "${userToBeFollowed.id}"){
+          username
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getCountOfFollowing = gql`
+      query {
+        getCountOfFollowing
+      }
+    `;
+
+    const response = await authenticatedClient.query({ query: getCountOfFollowing });
+    expect(Number(response.data.getCountOfFollowing)).to.be.greaterThan(0);
+  });
+
+  it('Should get followers count of user', async () => {
+    const followUser = gql`
+        mutation{
+          followUser( id: "${userToBeFollowed.id}"){
+            username
+          }
+        }
+     `;
+    await authenticatedClient.mutate({ mutation: followUser });
+
+    const getCountOfFollowers = gql`
+      query {
+        getCountOfFollowers
+      }
+    `;
+
+    const response = await authenticatedClient2.query({ query: getCountOfFollowers });
+    expect(Number(response.data.getCountOfFollowers)).to.be.greaterThan(0);
   });
 });

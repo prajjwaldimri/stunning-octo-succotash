@@ -1,7 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 import validator from 'validator';
-import { UserInputError } from 'apollo-server-express';
+import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import User from '../../../models/user';
+import UserFollowing from '../../../models/userFollowing';
 
 const createAccount = async (parent, args) => {
   if (!validator.isAlphanumeric(args.user.username)) {
@@ -23,4 +25,79 @@ const createAccount = async (parent, args) => {
   return User.create({ username: args.user.username, password: hashedPassword });
 };
 
-module.exports = { createAccount };
+const followUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+  if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
+    throw new UserInputError('User id cannot be empty');
+  }
+
+  const userFound = await User.findById(args.id)
+    .lean()
+    .exec();
+
+  if (!userFound) {
+    throw new UserInputError('user does not exist (wrong id provided)');
+  }
+
+  const currentUser = await User.findOne({ username: user.username })
+    .lean()
+    .exec();
+
+  const isUserAlreadyFollowing = await UserFollowing.findOne({
+    follower: currentUser._id,
+    following: args.id,
+  });
+
+  if (isUserAlreadyFollowing) {
+    throw new UserInputError('Already following the provided user');
+  }
+
+  await UserFollowing.create({ follower: currentUser._id, following: args.id });
+
+  return User.findOneAndUpdate(
+    { username: user.username },
+    { $push: { following: args.id } },
+    { new: true },
+  );
+};
+
+const unfollowUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+  if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
+    throw new UserInputError('User id cannot be empty');
+  }
+
+  const userFound = await User.findById(args.id);
+  if (!userFound) {
+    throw new UserInputError('user does not exist (wrong id provided)');
+  }
+
+  const currentUser = await User.findOne({ username: user.username })
+    .lean()
+    .exec();
+
+  const isUserAlreadyFollowing = await UserFollowing.findOne({
+    follower: currentUser._id,
+    following: args.id,
+  });
+
+  if (!isUserAlreadyFollowing) {
+    throw new UserInputError('Not following provided user(first follow to unfollow)');
+  }
+
+  await UserFollowing.findOneAndDelete({
+    follower: currentUser._id,
+    following: args.id,
+  });
+
+  return User.findOneAndUpdate(
+    { username: user.username },
+    { $pull: { following: args.id } },
+    { new: true },
+  );
+};
+module.exports = { createAccount, followUser, unfollowUser };

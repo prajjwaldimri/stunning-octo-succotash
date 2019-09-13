@@ -3,6 +3,7 @@ import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../../models/user';
+import UserFollowing from '../../../models/userFollowing';
 
 const login = async (parent, args) => {
   if (validator.isEmpty(args.user.username, { ignore_whitespace: true })) {
@@ -56,8 +57,66 @@ const profile = async (parent, args, { user }, info) => {
     throw new AuthenticationError('You are not logged in!');
   }
   const mongooseSelectionFields = await generateMongooseSelectFieldsFromInfo(info);
-
   return User.findOne({ username: user.username }, mongooseSelectionFields, { lean: true });
 };
 
-module.exports = { login, profile };
+const getFollowersOfUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+
+  const currentUser = await User.findOne({ username: user.username });
+
+  // eslint-disable-next-line no-underscore-dangle
+  let followers = await UserFollowing.find({ following: currentUser._id }, 'follower')
+    .populate('follower', 'username')
+    .lean()
+    .exec();
+
+  followers = followers.map(data => data.follower);
+  return followers;
+};
+
+const getFollowingOfUser = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+  const currentUser = await User.findOne({ username: user.username })
+    .populate('following')
+    .select('following')
+    .lean()
+    .exec();
+  return currentUser.following;
+};
+
+const getCountOfFollowers = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+
+  const currentUser = await User.findOne({ username: user.username }).exec();
+
+  const followersCount = await UserFollowing.countDocuments({ following: currentUser.id })
+    .exec();
+  return followersCount;
+};
+
+const getCountOfFollowing = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+
+  const currentUser = await User.findOne({ username: user.username }).exec();
+  const followingCount = await UserFollowing.countDocuments({ follower: currentUser.id })
+    .exec();
+  return followingCount;
+};
+
+module.exports = {
+  login,
+  profile,
+  getFollowersOfUser,
+  getFollowingOfUser,
+  getCountOfFollowers,
+  getCountOfFollowing,
+};
