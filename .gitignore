@@ -22,3 +22,15 @@ build/
 _yardoc
 doc/
 .idea/
+
+.vscode/
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# dotenv environment variables file
+.env
