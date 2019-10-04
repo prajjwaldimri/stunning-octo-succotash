@@ -16,6 +16,7 @@ app.listen(1337, '127.0.0.1');
 
 import User from '../src/models/user';
 import UserFollowing from '../src/models/userFollowing';
+import Post from '../src/models/post';
 
 const { expect, assert } = require('chai');
 
