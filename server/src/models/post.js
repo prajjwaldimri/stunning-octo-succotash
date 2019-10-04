@@ -20,7 +20,7 @@ const postSchema = new Schema(
         ref: 'User',
       },
     ],
-    boo: [
+    booo: [
       {
         type: Schema.Types.ObjectId,
         ref: 'User',
