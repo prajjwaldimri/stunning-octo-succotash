@@ -1,3 +1,7 @@
 type Post {
-  title: String
+  title: String!
+  body: String!
+  author: User!
+  kudos:[User!]
+  booo:[User!]
 }
