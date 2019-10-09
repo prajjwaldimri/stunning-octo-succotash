@@ -4,4 +4,5 @@ type Post {
   author: User!
   kudos:[User!]
   booo:[User!]
+  comment:[Comment!]
 }
