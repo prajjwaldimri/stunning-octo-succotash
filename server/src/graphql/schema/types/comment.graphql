@@ -1,0 +1,6 @@
+type Comment {
+    author:String!
+    body:String!
+    kudos:String
+    booo:String
+}
