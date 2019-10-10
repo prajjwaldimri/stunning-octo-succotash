@@ -3,6 +3,7 @@ import validator from 'validator';
 import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import User from '../../../models/user';
+import Post from '../../../models/post';
 import UserFollowing from '../../../models/userFollowing';
 
 const createAccount = async (parent, args) => {
@@ -101,16 +102,19 @@ const unfollowUser = async (parent, args, { user }) => {
   );
 };
 
-const createPost = async (parent,args,{user},info)=>{
+const createPost = async (parent, args, { user }) => {
   if (!user) {
     throw new AuthenticationError('You are not logged in!');
   }
-  if (validator.isEmpty(args.title, { ignore_whitespace: true })) {
+  if (validator.isEmpty(args.post.title, { ignore_whitespace: true })) {
     throw new UserInputError('Post title cannot be empty');
   }
-  if (validator.isEmpty(args.body, { ignore_whitespace: true })) {
+  if (validator.isEmpty(args.post.body, { ignore_whitespace: true })) {
     throw new UserInputError('Post body cannot be empty');
   }
-  return Post.create({ title: args.title, body: args.body, author: user.username });
+  return Post.create({ title: args.post.title, body: args.post.body, author: user.username });
 };
-module.exports = { createAccount, followUser, unfollowUser , createPost };
+
+module.exports = {
+  createAccount, followUser, unfollowUser, createPost,
+};
