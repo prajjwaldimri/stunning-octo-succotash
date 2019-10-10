@@ -15,4 +15,5 @@ type Mutation {
   createAccount(user: UserAccountInput): User
   followUser(id: ID!): User
   unfollowUser(id: ID!): User
+  createPost(post: PostInput): Post
 }

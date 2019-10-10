@@ -6,3 +6,8 @@ type Post {
   booo:[User!]
   comment:[Comment!]
 }
+
+input PostInput {
+  title: String
+  body: String
+}
