@@ -1,5 +1,6 @@
 #import "./types/user.graphql"
 #import "./types/post.graphql"
+#import "./types/comment.graphql"
 
 type Query {
   ping: String
