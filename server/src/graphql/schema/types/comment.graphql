@@ -1,6 +1,7 @@
 type Comment {
-    author:String!
+    author:User!
     body:String!
     kudos:String
     booo:String
+    post:Post!
 }
