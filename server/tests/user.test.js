@@ -517,4 +517,18 @@ describe('User Test', async function () {
     const response = await authenticatedClient2.query({ query: getCountOfFollowers });
     expect(Number(response.data.getCountOfFollowers)).to.be.greaterThan(0);
   });
+
+  it('Should create a post', async () => {
+    const title = 'Hello World';
+    const body = 'jaklsdfj sfdjaslkdfjlk';
+    const createPost = gql`
+      mutation {
+        createPost(post: { title: "${title}", body: "${body}" }){
+          title
+        }
+      }
+    `;
+    const response = await authenticatedClient.mutate({ mutation: createPost });
+    expect(response.data.createPost.title).to.equal(title);
+  });
 });
