@@ -14,6 +14,7 @@ const resolvers = {
     createAccount: user.createAccount,
     followUser: user.followUser,
     unfollowUser: user.unfollowUser,
+    createPost: user.createPost,
   },
 };
 

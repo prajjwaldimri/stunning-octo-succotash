@@ -100,4 +100,17 @@ const unfollowUser = async (parent, args, { user }) => {
     { new: true },
   );
 };
-module.exports = { createAccount, followUser, unfollowUser };
+
+const createPost = async (parent,args,{user},info)=>{
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+  if (validator.isEmpty(args.title, { ignore_whitespace: true })) {
+    throw new UserInputError('Post title cannot be empty');
+  }
+  if (validator.isEmpty(args.body, { ignore_whitespace: true })) {
+    throw new UserInputError('Post body cannot be empty');
+  }
+  return Post.create({ title: args.title, body: args.body, author: user.username });
+};
+module.exports = { createAccount, followUser, unfollowUser , createPost };
