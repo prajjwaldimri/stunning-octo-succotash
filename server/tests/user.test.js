@@ -531,4 +531,17 @@ describe('User Test', async function () {
     const response = await authenticatedClient.mutate({ mutation: createPost });
     expect(response.data.createPost.title).to.equal(title);
   });
+
+  it('Should create a comment', async () => {
+    const body = 'hahahhahaha';
+    const createComment = gql`
+      mutation {
+        createComment( body: "${body}"){
+          body
+        }
+      }
+    `;
+    const response = await authenticatedClient.mutate({ mutation: createComment });
+    expect(response.data.createComment.body).to.equal(body);
+  });
 });
