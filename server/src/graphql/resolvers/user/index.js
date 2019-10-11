@@ -1,4 +1,6 @@
-import { createAccount, followUser, unfollowUser, createPost } from './mutation';
+import {
+  createAccount, followUser, unfollowUser, createPost, createComment,
+} from './mutation';
 import {
   login, profile, getFollowersOfUser, getFollowingOfUser, getCountOfFollowers, getCountOfFollowing,
 } from './query';
@@ -8,6 +10,7 @@ module.exports = {
   followUser,
   unfollowUser,
   createPost,
+  createComment,
   login,
   profile,
   getFollowersOfUser,

@@ -4,6 +4,7 @@ import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import User from '../../../models/user';
 import Post from '../../../models/post';
+import Comment from '../../../models/comment';
 import UserFollowing from '../../../models/userFollowing';
 
 const createAccount = async (parent, args) => {
@@ -115,6 +116,16 @@ const createPost = async (parent, args, { user }) => {
   return Post.create({ title: args.post.title, body: args.post.body, author: user.username });
 };
 
+const createComment = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('user is not valid');
+  }
+  if (validator.isEmpty(args.body, { ignore_whitespace: true })) {
+    throw new UserInputError('Comment body cannot be empty');
+  }
+  return Comment.create({ body: args.body, author: user.id });
+};
+
 module.exports = {
-  createAccount, followUser, unfollowUser, createPost,
+  createAccount, followUser, unfollowUser, createPost, createComment,
 };
