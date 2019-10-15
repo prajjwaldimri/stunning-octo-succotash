@@ -37,6 +37,7 @@ describe('User Test', async function () {
   before(async () => {
     await User.collection.drop();
     await UserFollowing.collection.drop();
+    await Post.collection.drop();
   });
 
   beforeEach(async () => {
@@ -533,15 +534,20 @@ describe('User Test', async function () {
   });
 
   it('Should create a comment', async () => {
-    const body = 'hahahhahaha';
+    const title = 'New post';
+    const body = 'This world is no longer a better place';
+
+    const createdPost = await Post.create({ title, body, author: createdUser.username });
+
+    const commentBody = 'not really';
     const createComment = gql`
       mutation {
-        createComment( body: "${body}"){
+        createComment( postId: "${createdPost.id}", body: "${commentBody}"){
           body
         }
       }
     `;
     const response = await authenticatedClient.mutate({ mutation: createComment });
-    expect(response.data.createComment.body).to.equal(body);
+    expect(response.data.createComment.body).to.equal(commentBody);
   });
 });
