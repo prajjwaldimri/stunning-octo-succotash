@@ -123,7 +123,26 @@ const createComment = async (parent, args, { user }) => {
   if (validator.isEmpty(args.body, { ignore_whitespace: true })) {
     throw new UserInputError('Comment body cannot be empty');
   }
-  return Comment.create({ body: args.body, author: user.id });
+
+  const currentUser = await User.findOne({ username: user.username })
+    .lean()
+    .exec();
+
+  const comment = await Comment.create(
+    {
+      body: args.body,
+      author: currentUser._id,
+      post: args.postId,
+    },
+  );
+
+  await Post.findByIdAndUpdate(
+    args.postId,
+    { $push: { comments: comment._id } },
+    { new: true, useFindAndModify: true },
+  );
+
+  return comment;
 };
 
 module.exports = {
