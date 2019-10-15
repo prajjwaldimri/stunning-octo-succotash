@@ -17,5 +17,5 @@ type Mutation {
   followUser(id: ID!): User
   unfollowUser(id: ID!): User
   createPost(post: PostInput): Post
-  createComment(body: String): Comment
+  createComment(postId: ID!, body: String): Comment
 }
