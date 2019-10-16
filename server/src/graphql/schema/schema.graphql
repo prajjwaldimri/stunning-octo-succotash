@@ -6,6 +6,7 @@ type Query {
   ping: String
   login(user: UserAccountInput): String!
   profile: User!
+  getPost(title: String): [Post]
   getFollowersOfUser: [User]
   getFollowingOfUser: [User]
   getCountOfFollowers:String

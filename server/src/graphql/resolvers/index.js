@@ -5,6 +5,7 @@ const resolvers = {
     ping: () => 'Pong',
     login: user.login,
     profile: user.profile,
+    getPost: user.getPost,
     getFollowersOfUser: user.getFollowersOfUser,
     getFollowingOfUser: user.getFollowingOfUser,
     getCountOfFollowers: user.getCountOfFollowers,
