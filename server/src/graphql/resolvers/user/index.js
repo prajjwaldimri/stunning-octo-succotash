@@ -2,7 +2,7 @@ import {
   createAccount, followUser, unfollowUser, createPost, createComment,
 } from './mutation';
 import {
-  login, profile, getFollowersOfUser, getFollowingOfUser, getCountOfFollowers, getCountOfFollowing,
+  login, profile, getFollowersOfUser, getFollowingOfUser, getCountOfFollowers, getCountOfFollowing, getPost,
 } from './query';
 
 module.exports = {
@@ -13,6 +13,7 @@ module.exports = {
   createComment,
   login,
   profile,
+  getPost,
   getFollowersOfUser,
   getFollowingOfUser,
   getCountOfFollowers,
