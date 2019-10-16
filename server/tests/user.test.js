@@ -550,4 +550,27 @@ describe('User Test', async function () {
     const response = await authenticatedClient.mutate({ mutation: createComment });
     expect(response.data.createComment.body).to.equal(commentBody);
   });
+
+  it('should get posts', async () => {
+    const title = 'Hello World';
+    const body = 'jaklsdfj sfdjaslkdfjlk';
+    const createPost = gql`
+      mutation {
+        createPost(post: { title: "${title}", body: "${body}" }){
+          title
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: createPost });
+
+    const getPost = gql`
+      query {
+        getPost(title: "${title}") {
+          title
+        }
+      }
+    `;
+    const response = await authenticatedClient.query({ query: getPost });
+    expect(response.data.getPost).to.not.be.null;
+  });
 });
