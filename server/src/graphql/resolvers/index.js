@@ -1,11 +1,12 @@
 import user from './user';
+import post from './post';
 
 const resolvers = {
   Query: {
     ping: () => 'Pong',
     login: user.login,
     profile: user.profile,
-    getPost: user.getPost,
+    getPost: post.getPost,
     getFollowersOfUser: user.getFollowersOfUser,
     getFollowingOfUser: user.getFollowingOfUser,
     getCountOfFollowers: user.getCountOfFollowers,
@@ -15,8 +16,8 @@ const resolvers = {
     createAccount: user.createAccount,
     followUser: user.followUser,
     unfollowUser: user.unfollowUser,
-    createPost: user.createPost,
-    createComment: user.createComment,
+    createPost: post.createPost,
+    createComment: post.createComment,
   },
 };
 

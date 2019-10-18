@@ -3,7 +3,6 @@ import { UserInputError, AuthenticationError } from 'apollo-server-express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../../../models/user';
-import Post from '../../../models/post';
 import UserFollowing from '../../../models/userFollowing';
 
 const login = async (parent, args) => {
@@ -113,17 +112,6 @@ const getCountOfFollowing = async (parent, args, { user }) => {
   return followingCount;
 };
 
-const getPost = async (parent, args, { user }) => {
-  if (!user) {
-    throw new AuthenticationError('You are not logged in!');
-  }
-
-  if (!args.title) {
-    return Post.find({});
-  }
-
-  return Post.find({ title: args.title });
-};
 
 module.exports = {
   login,
@@ -132,5 +120,4 @@ module.exports = {
   getFollowingOfUser,
   getCountOfFollowers,
   getCountOfFollowing,
-  getPost,
 };
