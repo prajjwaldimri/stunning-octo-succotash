@@ -553,7 +553,7 @@ describe('User Test', async function () {
   });
 
   it('should get posts', async () => {
-    const title = 'Hello World';
+    const title = 'Hello Universe';
     const body = 'jaklsdfj sfdjaslkdfjlk';
     const createPost = gql`
       mutation {
@@ -576,7 +576,6 @@ describe('User Test', async function () {
       }
     `;
     const response = await authenticatedClient.query({ query: getPost });
-    console.log('response.author.username', response.data);
     expect(response.data.getPost).to.not.be.null;
   });
 });
