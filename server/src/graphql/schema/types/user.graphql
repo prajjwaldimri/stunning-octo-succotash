@@ -3,6 +3,7 @@ type User {
   email: String
   username: String
   age: Int
+  posts: [Post!]
 }
 
 input UserAccountInput {

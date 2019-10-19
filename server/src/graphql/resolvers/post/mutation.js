@@ -16,7 +16,20 @@ const createPost = async (parent, args, { user }) => {
     throw new UserInputError('Post body cannot be empty');
   }
   const existingUser = await User.findOne({ username: user.username });
-  return Post.create({ title: args.post.title, body: args.post.body, author: existingUser.id });
+  const post = await Post.create(
+    {
+      title: args.post.title,
+      body: args.post.body,
+      author: existingUser.id,
+    },
+  );
+
+  await User.findByIdAndUpdate(
+    existingUser._id,
+    { $push: { posts: post._id } },
+    { new: true, useFindAndModify: true },
+  );
+  return post;
 };
 
 const createComment = async (parent, args, { user }) => {
