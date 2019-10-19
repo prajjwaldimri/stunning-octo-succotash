@@ -15,7 +15,8 @@ const createPost = async (parent, args, { user }) => {
   if (validator.isEmpty(args.post.body, { ignore_whitespace: true })) {
     throw new UserInputError('Post body cannot be empty');
   }
-  return Post.create({ title: args.post.title, body: args.post.body, author: user.username });
+  const existingUser = await User.findOne({ username: user.username });
+  return Post.create({ title: args.post.title, body: args.post.body, author: existingUser.id });
 };
 
 const createComment = async (parent, args, { user }) => {

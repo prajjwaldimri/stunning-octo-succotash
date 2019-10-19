@@ -32,7 +32,6 @@ const followUser = async (parent, args, { user }) => {
   if (validator.isEmpty(args.id, { ignore_whitespace: true })) {
     throw new UserInputError('User id cannot be empty');
   }
-
   const userFound = await User.findById(args.id)
     .lean()
     .exec();

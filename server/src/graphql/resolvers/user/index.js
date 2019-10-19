@@ -5,6 +5,7 @@ import {
   login, profile, getFollowersOfUser, getFollowingOfUser, getCountOfFollowers, getCountOfFollowing,
 } from './query';
 
+
 module.exports = {
   createAccount,
   followUser,

@@ -533,11 +533,12 @@ describe('User Test', async function () {
     expect(response.data.createPost.title).to.equal(title);
   });
 
+
   it('Should create a comment', async () => {
     const title = 'New post';
     const body = 'This world is no longer a better place';
-
-    const createdPost = await Post.create({ title, body, author: createdUser.username });
+    const existingUser = await User.findOne({ username: createdUser.username });
+    const createdPost = await Post.create({ title, body, author: existingUser.id });
 
     const commentBody = 'not really';
     const createComment = gql`
@@ -566,11 +567,16 @@ describe('User Test', async function () {
     const getPost = gql`
       query {
         getPost(title: "${title}") {
-          title
+          title,
+          body,
+          author{
+            username
+          }
         }
       }
     `;
     const response = await authenticatedClient.query({ query: getPost });
+    console.log('response.author.username', response.data);
     expect(response.data.getPost).to.not.be.null;
   });
 });

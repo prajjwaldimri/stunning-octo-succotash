@@ -19,6 +19,9 @@ const resolvers = {
     createPost: post.createPost,
     createComment: post.createComment,
   },
+  Post: {
+    author: post.author,
+  },
 };
 
 export { resolvers as default };
