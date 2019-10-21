@@ -61,7 +61,39 @@ const createComment = async (parent, args, { user }) => {
   return comment;
 };
 
+const kudos = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+
+  const currentUser = await User.findOne({ username: user.username })
+    .lean()
+    .exec();
+
+  return Post.findByIdAndUpdate(
+    args.postId,
+    { $push: { kudos: currentUser._id } },
+    { new: true, useFindAndModify: false },
+  );
+};
+
+const booo = async (parent, args, { user }) => {
+  if (!user) {
+    throw new AuthenticationError('You are not logged in!');
+  }
+
+  const currentUser = await User.find({ username: user.username });
+
+  return Post.findByIdAndUpdate(
+    args.postId,
+    { $push: { booo: currentUser._id } },
+    { new: true, useFindAndModify: false },
+  );
+};
+
 module.exports = {
   createPost,
   createComment,
+  kudos,
+  booo,
 };
