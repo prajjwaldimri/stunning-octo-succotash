@@ -1,6 +1,8 @@
 import {
   createPost,
   createComment,
+  kudos,
+  booo,
 } from './mutation';
 import {
   getPost,
@@ -12,6 +14,8 @@ import {
 module.exports = {
   createPost,
   createComment,
+  kudos,
+  booo,
   getPost,
   author,
 };

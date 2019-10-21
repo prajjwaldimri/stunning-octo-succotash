@@ -18,6 +18,8 @@ const resolvers = {
     unfollowUser: user.unfollowUser,
     createPost: post.createPost,
     createComment: post.createComment,
+    kudos: post.kudos,
+    booo: post.booo,
   },
   Post: {
     author: post.author,
