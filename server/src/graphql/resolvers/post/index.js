@@ -10,6 +10,9 @@ import {
 import {
   author,
 } from './author';
+import {
+  comment,
+} from './comment';
 
 module.exports = {
   createPost,
@@ -18,4 +21,5 @@ module.exports = {
   booo,
   getPost,
   author,
+  comment,
 };

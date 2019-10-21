@@ -17,6 +17,7 @@ app.listen(1337, '127.0.0.1');
 import User from '../src/models/user';
 import UserFollowing from '../src/models/userFollowing';
 import Post from '../src/models/post';
+import Comment from '../src/models/comment';
 
 const { expect, assert } = require('chai');
 
@@ -38,6 +39,7 @@ describe('User Test', async function () {
     await User.collection.drop();
     await UserFollowing.collection.drop();
     await Post.collection.drop();
+    await Comment.collection.drop();
   });
 
   beforeEach(async () => {
@@ -572,6 +574,41 @@ describe('User Test', async function () {
           author{
             username
           }
+        }
+      }
+    `;
+    const response = await authenticatedClient.query({ query: getPost });
+    expect(response.data.getPost).to.not.be.null;
+  });
+
+  it('should get post with comments', async () => {
+    const title = 'New post for comments';
+    const body = 'This world is no longer a better place for us';
+    const existingUser = await User.findOne({ username: createdUser.username });
+    const createdPost = await Post.create({ title, body, author: existingUser.id });
+
+    const commentBody = 'really ??';
+    const createComment = gql`
+      mutation {
+        createComment( postId: "${createdPost.id}", body: "${commentBody}"){
+          body
+        }
+      }
+    `;
+    await authenticatedClient.mutate({ mutation: createComment });
+
+    const getPost = gql`
+      query {
+        getPost(title: "${title}") {
+          title,
+          body,
+          author{
+            username
+          },
+          comment{
+            body
+          }
+          
         }
       }
     `;
