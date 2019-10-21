@@ -21,6 +21,7 @@ const resolvers = {
   },
   Post: {
     author: post.author,
+    comment: post.comment,
   },
 };
 
