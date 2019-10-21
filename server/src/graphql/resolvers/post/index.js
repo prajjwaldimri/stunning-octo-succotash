@@ -8,10 +8,14 @@ import {
 import {
   author,
 } from './author';
+import {
+  comment,
+} from './comment';
 
 module.exports = {
   createPost,
   createComment,
   getPost,
   author,
+  comment,
 };
