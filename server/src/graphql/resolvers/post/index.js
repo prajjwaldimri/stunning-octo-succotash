@@ -1,9 +1,13 @@
 import {
   createPost,
   createComment,
+  kudos,
+  booo,
 } from './mutation';
 import {
   getPost,
+  getKudosOfPost,
+  getBoooOfPost,
 } from './query';
 import {
   author,
@@ -16,6 +20,10 @@ module.exports = {
   createPost,
   createComment,
   getPost,
+  getKudosOfPost,
+  getBoooOfPost,
   author,
   comment,
+  kudos,
+  booo,
 };
