@@ -615,4 +615,34 @@ describe('User Test', async function () {
     const response = await authenticatedClient.query({ query: getPost });
     expect(response.data.getPost).to.not.be.null;
   });
+
+  it('Should not create a post(empty username)', async () => {
+    const title = ' ';
+    const body = 'adjfnkjdnvfd fjdaknjkd ';
+    const createPost = gql`
+      mutation {
+        createPost(post: { title: "${title}", body: "${body}" }){
+          title
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: createPost })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should not create a post(empty body)', async () => {
+    const title = 'Hello World';
+    const body = ' ';
+    const createPost = gql`
+      mutation {
+        createPost(post: { title: "${title}", body: "${body}" }){
+          title
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: createPost })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 });
