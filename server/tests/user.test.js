@@ -645,4 +645,23 @@ describe('User Test', async function () {
       .then(assert.fail, err => err);
     expect(error.graphQLErrors).to.have.lengthOf.above(0);
   });
+
+  it('Should not create a comment(empty body)', async () => {
+    const title = 'New post';
+    const body = 'This world is no longer a better place';
+    const existingUser = await User.findOne({ username: createdUser.username });
+    const createdPost = await Post.create({ title, body, author: existingUser.id });
+
+    const commentBody = ' ';
+    const createComment = gql`
+      mutation {
+        createComment( postId: "${createdPost.id}", body: "${commentBody}"){
+          body
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: createComment })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 });
