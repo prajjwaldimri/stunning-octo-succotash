@@ -6,6 +6,8 @@ import {
 } from './mutation';
 import {
   getPost,
+  getKudosOfPost,
+  getBoooOfPost,
 } from './query';
 import {
   author,
@@ -20,6 +22,10 @@ module.exports = {
   kudos,
   booo,
   getPost,
+  getKudosOfPost,
+  getBoooOfPost,
   author,
   comment,
+  kudos,
+  booo,
 };

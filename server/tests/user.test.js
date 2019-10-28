@@ -615,4 +615,53 @@ describe('User Test', async function () {
     const response = await authenticatedClient.query({ query: getPost });
     expect(response.data.getPost).to.not.be.null;
   });
+
+  it('Should not create a post(empty username)', async () => {
+    const title = ' ';
+    const body = 'adjfnkjdnvfd fjdaknjkd ';
+    const createPost = gql`
+      mutation {
+        createPost(post: { title: "${title}", body: "${body}" }){
+          title
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: createPost })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should not create a post(empty body)', async () => {
+    const title = 'Hello World';
+    const body = ' ';
+    const createPost = gql`
+      mutation {
+        createPost(post: { title: "${title}", body: "${body}" }){
+          title
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: createPost })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
+
+  it('Should not create a comment(empty body)', async () => {
+    const title = 'New post';
+    const body = 'This world is no longer a better place';
+    const existingUser = await User.findOne({ username: createdUser.username });
+    const createdPost = await Post.create({ title, body, author: existingUser.id });
+
+    const commentBody = ' ';
+    const createComment = gql`
+      mutation {
+        createComment( postId: "${createdPost.id}", body: "${commentBody}"){
+          body
+        }
+      }
+    `;
+    const error = await authenticatedClient.mutate({ mutation: createComment })
+      .then(assert.fail, err => err);
+    expect(error.graphQLErrors).to.have.lengthOf.above(0);
+  });
 });
