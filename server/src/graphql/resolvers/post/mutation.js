@@ -74,7 +74,7 @@ const kudos = async (parent, args, { user }) => {
     kudos: currentUser._id,
   });
 
-  if (alreadyyoLikes) {
+  if (alreadyLikes) {
     throw new UserInputError('Kudos already exist to the current post');
   }
 
