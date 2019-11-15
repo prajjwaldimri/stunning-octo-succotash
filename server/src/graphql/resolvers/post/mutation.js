@@ -70,6 +70,14 @@ const kudos = async (parent, args, { user }) => {
     .lean()
     .exec();
 
+  const alreadyLikes = await Post.findOne({
+    kudos: currentUser._id,
+  });
+
+  if (alreadyyoLikes) {
+    throw new UserInputError('Kudos already exist to the current post');
+  }
+
   return Post.findByIdAndUpdate(
     args.postId,
     { $push: { kudos: currentUser._id } },
@@ -83,6 +91,14 @@ const booo = async (parent, args, { user }) => {
   }
 
   const currentUser = await User.find({ username: user.username });
+
+  const alreadyDislikes = await Post.findOne({
+    booo: currentUser._id,
+  });
+
+  if (alreadyDislikes) {
+    throw new UserInputError('booo already exist to the current post');
+  }
 
   return Post.findByIdAndUpdate(
     args.postId,
