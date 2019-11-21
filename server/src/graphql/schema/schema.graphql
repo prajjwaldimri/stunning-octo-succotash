@@ -11,6 +11,8 @@ type Query {
   getFollowingOfUser: [User]
   getCountOfFollowers:String
   getCountOfFollowing:String
+  getKudosOfPost(id: ID!): [User]
+  getBoooOfPost(id: ID!): [User]
 }
 
 type Mutation {
