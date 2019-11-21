@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "serve": "vue-cli-service serve",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
@@ -30,7 +31,7 @@
     "sass-loader": "^6.0.6",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
-    "webpack": "^4.41.2",
+    "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
   }
 }
