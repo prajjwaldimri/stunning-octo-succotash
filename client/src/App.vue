@@ -1,5 +1,5 @@
 <template>
-  <homepage-status></homepage-status>
+  
     
 </template>
 
