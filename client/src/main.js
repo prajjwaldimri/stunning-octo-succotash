@@ -7,6 +7,7 @@ Vue.use(VueRouter);
 
 const router = new VueRouter({
   routes,
+  mode: 'history',
 });
 
 // eslint-disable-next-line no-new
