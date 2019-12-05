@@ -1,30 +1,75 @@
 <template>
-    <div class="header">
-        <div class="col-xs-12">
-            <header>
-                <img src="../assets/logo.png" alt="S.O.S.ial" width="140" height="100">
-                <h1>This is a header</h1>
-            </header>
+   <header class="header">
+        <div class="logo">
+            <a href="#Home"><img class="icon1"  src="../assets/logo.png"></a>
         </div>
-    </div>
+        <div class="profile">
+            <a href="#Profile"><img class="icon2" src="../assets/profile.png"></a> 
+        </div>
+        <div class="log">
+            <a href="#Sign_In" class="box b1" >Home</a>
+            <a href="#Sign_In" class="box b1" >Sign In</a>
+            <a href="#Sign_Op" class="box b2" >Sign Up</a>
+        </div>
+    </header>
 </template>
 
 <script>
 </script>
 
 <style>
-.header{
-  background-color: #f1f1f1;
-  padding: 20px 20px;
-  color: black;
-  text-align: center;
-  font-size: 10px;
-  font-weight: bold;
-  position: fixed; /* Fixed position - sit on top of the page */
-  top: 0;
-  width: 100%; /* Full width */
-  transition: 0.2s;
-
-
-}
+*{
+        margin: 0%;
+        padding: 0%;
+    }
+    header{
+        background-color: #F5F5F5;
+        height:3em ;
+    }
+    .logo{
+        float: left;
+        margin-left:2.5em ;
+    }
+    .profile{
+        float: right;
+        margin-top:.5em;
+        margin-right:2.5em;
+    }
+    .log{
+        float: right;
+        margin-top: .75em;
+        margin-right:1.5em;
+    }
+    .icon1{
+        height: 3.5em;
+    }
+    .icon2{
+        height:2em;
+    }
+    .box{
+        color: #049892;
+        text-align: center;
+        padding:.5em;
+        text-decoration: none;
+        font-size: 18px; 
+    }
+    .log a:hover {
+        background-color: #ddd;
+    }
+    @media screen and (max-width: 500px) {
+        .header a{
+            float:none;
+            display: block;
+            text-align: left;
+        }
+        .log{
+        float:none;
+        }
+        .profile{
+        float:none;
+        }
+        .logo{
+        float:none;
+        }
+    }
 </style>
