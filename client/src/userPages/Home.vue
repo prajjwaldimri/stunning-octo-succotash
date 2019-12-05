@@ -1,15 +1,9 @@
 <template>
-<<<<<<< HEAD
-    
-=======
 <div class="container">
     <app-login></app-login>
     <app-footer></app-footer>
         
 </div>
-
-
->>>>>>> ac1ec8d0e5f69f0103c63251e453683e4d7c2a61
 </template>
 
 <script>
@@ -24,16 +18,8 @@ export default {
   }
 }
 </script>
-
-<<<<<<< HEAD
-<style >
-   
-=======
 <style scoped>
 .container {
     width: 100%;
 }
 </style>>
-
->>>>>>> ac1ec8d0e5f69f0103c63251e453683e4d7c2a61
-</style>
