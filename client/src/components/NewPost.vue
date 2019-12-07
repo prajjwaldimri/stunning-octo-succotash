@@ -1,29 +1,24 @@
 <template>
     <div class="container">
            <div class="post post-label">
-               <label>Post:</label>
+               <label>Say Something:</label>
            </div>
            <div class="post post-body">
-               <form class="body box">
+               <form class="body box" action="#">
                    <input type="text" placeholder="title"><br>
-                   <textarea rows="7" cols="69" placeholder="Text"></textarea><br>
+                   <textarea  placeholder="Text"></textarea><br>
                    <button>Post</button>
                </form>
            </div>
         </div>
 </template>
 <script>
-export default {
-    
-}
+
 </script>
-<style lang="stylus" scoped>
+<style scoped>
 *{
     margin:0;
     padding:0;
-}
-body{
-    background-color:#dae0e6;
 }
 .container{
     border: 1px solid #049892;
@@ -31,6 +26,7 @@ body{
     width:40%;
     margin-left: 30%;
     background-color: white;
+    margin-bottom: .25%;
 }
 .post{
     border: 1px solid whitesmoke;
@@ -69,8 +65,10 @@ body{
     color:#049892;
 }
 .body textarea{
+    min-width: 97%;
     padding-left: 5px;
     max-width: 97%;
+    min-height: 120px;
     border: 1px #929292 solid;
 }
-</style>
+</style>>
