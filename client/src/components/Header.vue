@@ -22,9 +22,13 @@
         margin: 0%;
         padding: 0%;
     }
+    body{
+    background-color:#dae0e6;
+    }
     header{
-        background-color: #F5F5F5;
+        background-color: white;
         height:3em ;
+        margin-bottom: 1%;
     }
     .logo{
         float: left;
