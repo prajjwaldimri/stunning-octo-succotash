@@ -26,11 +26,11 @@
             <div class="reg-form-container">
                 <div class="reg-form">
                     <h3>Register Here</h3>
-                    <form>
-                        <label>Email: </label><input type="text" placeholder="Enter email here"><br>
-                        <label>Password: </label><input type="password" placeholder="Your password"><br>
-                        <label>Confirm Password: </label><input type="password" placeholder="Reenter password"><br>
-                        <button>Sign UP</button>
+                    <form action="#">
+                        <label>Email: </label><input v-model="uname" type="text" placeholder="Enter email here"><br>
+                        <label>Password: </label><input v-model="password" type="password" placeholder="Your password"><br>
+                        <label>Confirm Password: </label><input v-model="cnfPassword" type="password" placeholder="Reenter password"><br>
+                        <button @click="createUser">Sign UP</button>
                     </form>
                 </div>
             </div>
@@ -39,6 +39,36 @@
 </template>
 
 <script>
+import gql from 'graphql-tag';
+
+
+export default {
+
+    data: {
+        uname: "",
+        password: "",
+        cnfPasswd: "",
+    },
+    methods: {
+    createUser() {
+        console.log(this.uname);
+    // Mutation
+    this.$apollo.mutate({
+        mutation: gql`
+        mutation {
+            createAccount(user: { username: "${this.uname}", password: "${this.password}" }){
+            username
+            }
+        }
+        `
+    }).then(data => {
+        console.log('Done',data);
+        alert(this.uname+" Created")
+        
+    });
+    },
+  },
+}
 </script>
 
 <style>

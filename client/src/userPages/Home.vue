@@ -7,15 +7,17 @@
 </template>
 
 <script>
-    import Login from '../userPages/Login';
-    import Footer from '../components/Footer';
+import Login from '../userPages/Login';
+import Footer from '../components/Footer';
+
 export default {
 
   components: {
     'app-login': Login,
     'app-footer': Footer
 
-  }
+  },
+
 }
 </script>
 <style scoped>
