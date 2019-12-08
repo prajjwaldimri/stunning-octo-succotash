@@ -26,10 +26,15 @@
     }
     header{
         background-color: white;
+<<<<<<< HEAD
         align-items: center;
         position: fixed;
         height: 3em;
         width: 100%;
+=======
+        height:3em ;
+        margin-bottom: 1%;
+>>>>>>> 8749e7cfeefeaefaa00e67a8df765ad18911e3b9
     }
     .logo{
         float: left;
