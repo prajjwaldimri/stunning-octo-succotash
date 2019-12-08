@@ -27,6 +27,7 @@
     margin-left: 30%;
     background-color: white;
     margin-bottom: .25%;
+    margin-top:5%;
 }
 .post{
     border: 1px solid whitesmoke;

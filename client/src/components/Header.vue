@@ -1,5 +1,5 @@
 <template>
-   <header class="header">
+   <header style="top: 0px">
         <div class="logo">
             <a href="#Home"><img class="icon1"  src="../assets/logo.png"></a>
         </div>
@@ -7,9 +7,8 @@
             <a href="#Profile"><img class="icon2" src="../assets/profile.png"></a> 
         </div>
         <div class="log">
-            <a href="#Sign_In" class="box b1" >Home</a>
-            <a href="#Sign_In" class="box b1" >Sign In</a>
-            <a href="#Sign_Op" class="box b2" >Sign Up</a>
+            <a href="#Home" class="box b1" >Home</a>
+            <a href="#LogOut" class="box b1" >Log Out</a>
         </div>
     </header>
 </template>
@@ -22,9 +21,15 @@
         margin: 0%;
         padding: 0%;
     }
+    body{
+    background-color:#dae0e6;
+    }
     header{
-        background-color: #F5F5F5;
-        height:3em ;
+        background-color: white;
+        align-items: center;
+        position: fixed;
+        height: 3em;
+        width: 100%;
     }
     .logo{
         float: left;
@@ -40,8 +45,11 @@
         margin-top: .75em;
         margin-right:1.5em;
     }
+    .log a{
+        font-size:17px;
+    }
     .icon1{
-        height: 3.5em;
+        height: 3em;
     }
     .icon2{
         height:2em;
@@ -49,7 +57,7 @@
     .box{
         color: #049892;
         text-align: center;
-        padding:.5em;
+        padding:.3em;
         text-decoration: none;
         font-size: 18px; 
     }
