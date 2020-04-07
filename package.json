@@ -26,7 +26,7 @@
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "codacy-coverage": "^3.4.0",
-    "concurrently": "^4.1.2",
+    "concurrently": "^5.0.1",
     "consola": "^2.10.1",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
