@@ -4,28 +4,33 @@ import VueApollo from 'vue-apollo';
 import ApolloClient from 'apollo-boost';
 import App from './App.vue';
 import { routes } from './routes';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css'
 
-Vue.use(VueApollo);
+Vue.use(Vuetify);
+Vue.config.productionTip = false;
+
+Vue.use(Vuetify);
 
 const client = new ApolloClient({
-  uri: 'http://localhost:3000/graphql',
+    uri: 'http://localhost:3000/graphql',
 });
 
 const apolloProvider = new VueApollo({
-  defaultClient: client,
+    defaultClient: client,
 });
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  routes,
-  mode: 'history',
+    routes,
+    mode: 'history',
 });
 
 // eslint-disable-next-line no-new
 new Vue({
-  el: '#app',
-  apolloProvider,
-  router,
-  render: h => h(App),
+    el: '#app',
+    apolloProvider,
+    router,
+    render: h => h(App),
 });
