@@ -4,9 +4,10 @@ import VueApollo from 'vue-apollo';
 import ApolloClient from 'apollo-boost';
 import App from './App.vue';
 import { routes } from './routes';
-import Vuetify from 'vuetify';
+import Vuetify from '@/plugins/vuetify';
 import 'vuetify/dist/vuetify.min.css'
 
+new Vue({ Vuetify, }).$mount('#app')
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
