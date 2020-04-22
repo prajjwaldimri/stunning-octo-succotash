@@ -4,7 +4,7 @@ import VueApollo from 'vue-apollo';
 import ApolloClient from 'apollo-boost';
 import App from './App.vue';
 import { routes } from './routes';
-import Vuetify from '@/plugins/vuetify';
+import Vuetify from './plugins/vuetify';
 import 'vuetify/dist/vuetify.min.css'
 
 new Vue({ Vuetify, }).$mount('#app')
