@@ -9,7 +9,9 @@
     "dev-server": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nodemon --exec babel-node server/src/app.js",
     "start": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && cd client && npm run build && cd .. && cd server && babel src --out-dir dist && node dist/app.js",
     "test": "NODE_ENV=test && rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nyc mocha server/tests/*.test.js --require @babel/polyfill --require @babel/register --reporter list --exit",
-    "test-with-coverage": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nyc --reporter=text-lcov npm test | codacy-coverage --token db8266bb18894834b7228c84b9c4177e --debug"
+    "test-with-coverage": "rm -rf ./node_modules/.cache/babel-loader && rm -rf ./node_modules/.cache/@babel && nyc --reporter=text-lcov npm test | codacy-coverage --token db8266bb18894834b7228c84b9c4177e --debug",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -36,7 +38,8 @@
     "jsonwebtoken": "^8.5.1",
     "mocha-lcov-reporter": "^1.3.0",
     "mongoose": "^5.7.1",
-    "validator": "^10.11.0"
+    "validator": "^10.11.0",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",
@@ -56,5 +59,6 @@
     "mocha": "^6.2.0",
     "nodemon": "^1.19.2",
     "nyc": "^14.1.1"
-  }
+  },
+  "snyk": true
 }
