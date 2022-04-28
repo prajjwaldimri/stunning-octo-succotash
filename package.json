@@ -48,7 +48,7 @@
     "apollo-boost": "^0.3.1",
     "babel-plugin-import-graphql": "^2.7.0",
     "chai": "^4.2.0",
-    "cross-fetch": "^3.0.4",
+    "cross-fetch": "^3.1.5",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
