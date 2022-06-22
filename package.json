@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/prajjwaldimri/stunning-octo-succotash#readme",
   "dependencies": {
-    "apollo-server-express": "^2.9.3",
+    "apollo-server-express": "^3.0.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "codacy-coverage": "^3.4.0",
